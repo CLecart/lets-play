@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,11 +38,11 @@ import java.util.Arrays;
  *   <li>Rate limiting filter for API abuse protection</li>
  *   <li>Method-level security with @PreAuthorize annotations</li>
  *   <li>Custom authentication entry point for unauthorized access</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote This configuration disables CSRF as it's not needed for stateless JWT authentication
- * @implNote Uses filter chain approach with Spring Security 6.x configuration style
- * @security All passwords are encrypted with BCrypt, JWT tokens provide stateless authentication
+ * <p><strong>API Note:</strong> This configuration disables CSRF as it's not needed for stateless JWT authentication</p>
+ * <p><strong>Implementation Note:</strong> Uses filter chain approach with Spring Security 6.x configuration style</p>
+ * <p><strong>Security:</strong> All passwords are encrypted with BCrypt, JWT tokens provide stateless authentication</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -81,7 +80,7 @@ public class WebSecurityConfig {
     /**
      * Comma-separated list of allowed CORS origins loaded from application properties.
      * 
-     * @apiNote Supports wildcard patterns for flexible origin matching
+     * <p><strong>API Note:</strong> Supports wildcard patterns for flexible origin matching</p>
      */
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
@@ -95,7 +94,7 @@ public class WebSecurityConfig {
      * 
      * @return AuthTokenFilter configured JWT authentication filter
      * 
-     * @apiNote This filter is added before UsernamePasswordAuthenticationFilter in the chain
+     * <p><strong>API Note:</strong> This filter is added before UsernamePasswordAuthenticationFilter in the chain</p>
      * @see com.example.lets_play.security.AuthTokenFilter
      */
     @Bean
@@ -103,24 +102,7 @@ public class WebSecurityConfig {
         return new AuthTokenFilter();
     }
 
-    /**
-     * Creates and configures the DAO authentication provider for database-based authentication.
-     * 
-     * <p>This provider handles username/password authentication by loading user details
-     * from the database and validating credentials against stored BCrypt hashes.</p>
-     * 
-     * @return DaoAuthenticationProvider configured for database authentication
-     * 
-     * @implNote Uses custom UserDetailsService and BCrypt password encoder
-     * @security Password validation performed against BCrypt hashes in database
-     */
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+
 
     /**
      * Exposes the authentication manager bean for manual authentication operations.
@@ -149,8 +131,8 @@ public class WebSecurityConfig {
      * 
      * @return PasswordEncoder BCrypt password encoder with default strength
      * 
-     * @apiNote Default BCrypt strength of 10 provides good security/performance balance
-     * @security BCrypt includes salt generation and is resistant to rainbow table attacks
+     * <p><strong>API Note:</strong> Default BCrypt strength of 10 provides good security/performance balance</p>
+     * <p><strong>Security:</strong> BCrypt includes salt generation and is resistant to rainbow table attacks</p>
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -166,9 +148,9 @@ public class WebSecurityConfig {
      * 
      * @return CorsConfigurationSource configured CORS settings for the application
      * 
-     * @apiNote Allows credentials for JWT token-based authentication
-     * @implNote Uses origin patterns for flexible domain matching
-     * @security Credential support enables secure cross-origin authenticated requests
+     * <p><strong>API Note:</strong> Allows credentials for JWT token-based authentication</p>
+     * <p><strong>Implementation Note:</strong> Uses origin patterns for flexible domain matching</p>
+     * <p><strong>Security:</strong> Credential support enables secure cross-origin authenticated requests</p>
      */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -195,7 +177,7 @@ public class WebSecurityConfig {
      *   <li>CSRF: Disabled (not needed for stateless JWT authentication)</li>
      *   <li>Sessions: Stateless (no server-side session storage)</li>
      *   <li>Authentication: JWT-based with custom entry point for unauthorized access</li>
-     * </ul></p>
+     * </ul>
      * 
      * <p>Access rules:
      * <ul>
@@ -203,23 +185,23 @@ public class WebSecurityConfig {
      *   <li>/api/products/** - Public access (product browsing)</li>
      *   <li>/error - Public access (error handling)</li>
      *   <li>All other requests - Authentication required</li>
-     * </ul></p>
+     * </ul>
      * 
      * <p>Filter chain order:
      * <ol>
      *   <li>Rate limiting filter (API abuse protection)</li>
      *   <li>JWT authentication filter (token processing)</li>
      *   <li>Username/password authentication filter (Spring Security default)</li>
-     * </ol></p>
+     * </ol>
      * 
      * @param http the HttpSecurity configuration object
      * @return SecurityFilterChain the configured security filter chain
      * 
      * @throws Exception if security configuration fails
      * 
-     * @apiNote CSRF is disabled as JWT tokens provide CSRF protection for stateless APIs
-     * @implNote Rate limiting filter is positioned before JWT filter for early request filtering
-     * @security Stateless configuration prevents session fixation and reduces server memory usage
+     * <p><strong>API Note:</strong> CSRF is disabled as JWT tokens provide CSRF protection for stateless APIs</p>
+     * <p><strong>Implementation Note:</strong> Rate limiting filter is positioned before JWT filter for early request filtering</p>
+     * <p><strong>Security:</strong> Stateless configuration prevents session fixation and reduces server memory usage</p>
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -234,7 +216,7 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
             );
 
-        http.authenticationProvider(authenticationProvider());
+        // Authentication is handled by JWT filter - no need for DaoAuthenticationProvider
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(rateLimitingFilter, AuthTokenFilter.class);
 

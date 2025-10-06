@@ -25,11 +25,11 @@ import java.util.Date;
  *   <li>Comprehensive token validation with detailed error logging</li>
  *   <li>Safe claim extraction with proper exception handling</li>
  *   <li>Configurable secret key and expiration time via application properties</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote JWT tokens are stateless and contain user identification information
- * @implNote Uses JJWT library version 0.11.5 for JWT operations
- * @security Secret key must be at least 256 bits for HMAC-SHA512 algorithm
+ * <p><strong>API Note:</strong> JWT tokens are stateless and contain user identification information</p>
+ * <p><strong>Implementation Note:</strong> Uses JJWT library version 0.11.5 for JWT operations</p>
+ * <p><strong>Security:</strong> Secret key must be at least 256 bits for HMAC-SHA512 algorithm</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -45,8 +45,8 @@ public class JwtUtils {
     /**
      * JWT secret key loaded from application properties.
      * 
-     * @implNote Must be at least 256 bits (32 characters) for HMAC-SHA512
-     * @security Should be kept secret and rotated regularly in production
+     * <p><strong>Implementation Note:</strong> Must be at least 256 bits (32 characters) for HMAC-SHA512</p>
+     * <p><strong>Security:</strong> Should be kept secret and rotated regularly in production</p>
      */
     @Value("${app.jwt.secret}")
     private String jwtSecret;
@@ -54,7 +54,7 @@ public class JwtUtils {
     /**
      * JWT token expiration time in milliseconds loaded from application properties.
      * 
-     * @apiNote Default is typically 24 hours (86400000ms)
+     * <p><strong>API Note:</strong> Default is typically 24 hours (86400000ms)</p>
      */
     @Value("${app.jwt.expiration}")
     private int jwtExpirationMs;
@@ -67,8 +67,8 @@ public class JwtUtils {
      * 
      * @return SecretKey instance for JWT signing operations
      * 
-     * @implNote Uses JJWT's Keys.hmacShaKeyFor() for secure key generation
-     * @security Key strength depends on the length and entropy of the secret string
+     * <p><strong>Implementation Note:</strong> Uses JJWT's Keys.hmacShaKeyFor() for secure key generation</p>
+     * <p><strong>Security:</strong> Key strength depends on the length and entropy of the secret string</p>
      */
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
@@ -86,9 +86,9 @@ public class JwtUtils {
      * 
      * @throws ClassCastException if the authentication principal is not a UserPrincipal
      * 
-     * @apiNote The generated token should be prefixed with "Bearer " in Authorization headers
-     * @implNote Token subject contains the user ID for efficient user lookup
-     * @security Token is signed with HMAC-SHA512 and includes expiration time
+     * <p><strong>API Note:</strong> The generated token should be prefixed with "Bearer " in Authorization headers</p>
+     * <p><strong>Implementation Note:</strong> Token subject contains the user ID for efficient user lookup</p>
+     * <p><strong>Security:</strong> Token is signed with HMAC-SHA512 and includes expiration time</p>
      */
     public String generateJwtToken(Authentication authentication) {
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -112,9 +112,9 @@ public class JwtUtils {
      * 
      * @throws JwtException if the token is invalid, expired, or malformed
      * 
-     * @apiNote Token must be valid and non-expired for successful extraction
-     * @implNote Performs full token validation including signature verification
-     * @security Only tokens with valid signatures can be successfully parsed
+     * <p><strong>API Note:</strong> Token must be valid and non-expired for successful extraction</p>
+     * <p><strong>Implementation Note:</strong> Performs full token validation including signature verification</p>
+     * <p><strong>Security:</strong> Only tokens with valid signatures can be successfully parsed</p>
      */
     public String getUserIdFromJwtToken(String token) {
         return Jwts.parserBuilder()
@@ -135,9 +135,9 @@ public class JwtUtils {
      * @param authToken the JWT token to validate (without "Bearer " prefix)
      * @return boolean true if the token is valid, false otherwise
      * 
-     * @apiNote This method never throws exceptions - all errors result in false return value
-     * @implNote Comprehensive error logging helps with debugging authentication issues
-     * @security Failed validations are logged for security monitoring purposes
+     * <p><strong>API Note:</strong> This method never throws exceptions - all errors result in false return value</p>
+     * <p><strong>Implementation Note:</strong> Comprehensive error logging helps with debugging authentication issues</p>
+     * <p><strong>Security:</strong> Failed validations are logged for security monitoring purposes</p>
      * 
      * @see SecurityException for invalid JWT signatures
      * @see MalformedJwtException for malformed JWT tokens

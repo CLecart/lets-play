@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
  *   <li>Email uniqueness validation</li>
  *   <li>Role-based access control with administrative privileges</li>
  *   <li>User profile self-management capabilities</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote This service integrates with Spring Security for authentication and authorization
- * @implNote Uses method-level security annotations for access control
- * @security Passwords are automatically encrypted before storage using BCrypt
+ * <p><strong>API Note:</strong> This service integrates with Spring Security for authentication and authorization</p>
+ * <p><strong>Implementation Note:</strong> Uses method-level security annotations for access control</p>
+ * <p><strong>Security:</strong> Passwords are automatically encrypted before storage using BCrypt</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -69,9 +69,9 @@ public class UserService {
      * @throws BadRequestException if the email is already registered in the system
      * @throws jakarta.validation.ConstraintViolationException if request data is invalid
      * 
-     * @apiNote Password is automatically encrypted before storage
-     * @implNote Email uniqueness is checked before user creation
-     * @security Password is hashed using BCrypt with default strength (10 rounds)
+     * <p><strong>API Note:</strong> Password is automatically encrypted before storage</p>
+     * <p><strong>Implementation Note:</strong> Email uniqueness is checked before user creation</p>
+     * <p><strong>Security:</strong> Password is hashed using BCrypt with default strength (10 rounds)</p>
      */
     public UserResponse createUser(UserCreateRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -99,8 +99,8 @@ public class UserService {
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
      * 
-     * @apiNote Only administrators can access the complete user list
-     * @security Requires ADMIN role authorization via method-level security
+     * <p><strong>API Note:</strong> Only administrators can access the complete user list</p>
+     * <p><strong>Security:</strong> Requires ADMIN role authorization via method-level security</p>
      */
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
@@ -121,8 +121,8 @@ public class UserService {
      * 
      * @throws ResourceNotFoundException if no user exists with the specified ID
      * 
-     * @apiNote Access control is handled at the controller level
-     * @implNote Uses Optional-based lookup with custom exception handling
+     * <p><strong>API Note:</strong> Access control is handled at the controller level</p>
+     * <p><strong>Implementation Note:</strong> Uses Optional-based lookup with custom exception handling</p>
      */
     public UserResponse getUserById(String id) {
         User user = userRepository.findById(id)
@@ -146,9 +146,9 @@ public class UserService {
      * @throws ResourceNotFoundException if no user exists with the specified ID
      * @throws BadRequestException if user tries to update another user's profile without admin rights
      * 
-     * @apiNote Role updates are restricted to administrators only
-     * @implNote Performs manual authorization checks based on user ID and role
-     * @security Passwords are re-encrypted when updated; role changes require admin privileges
+     * <p><strong>API Note:</strong> Role updates are restricted to administrators only</p>
+     * <p><strong>Implementation Note:</strong> Performs manual authorization checks based on user ID and role</p>
+     * <p><strong>Security:</strong> Passwords are re-encrypted when updated; role changes require admin privileges</p>
      */
     public UserResponse updateUser(String id, UserUpdateRequest request, String currentUserId, String currentUserRole) {
         User user = userRepository.findById(id)
@@ -186,8 +186,8 @@ public class UserService {
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not an admin and trying to delete another user's account
      * 
-     * @apiNote Account deletion is permanent and cannot be undone
-     * @security Users can only delete their own account unless they have ADMIN role
+     * <p><strong>API Note:</strong> Account deletion is permanent and cannot be undone</p>
+     * <p><strong>Security:</strong> Users can only delete their own account unless they have ADMIN role</p>
      */
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public void deleteUser(String id) {
@@ -206,8 +206,8 @@ public class UserService {
      * @param user the User entity to convert
      * @return UserResponse DTO containing safe user information
      * 
-     * @implNote This method excludes password and other sensitive fields
-     * @security Ensures sensitive data is never exposed in API responses
+     * <p><strong>Implementation Note:</strong> This method excludes password and other sensitive fields</p>
+     * <p><strong>Security:</strong> Ensures sensitive data is never exposed in API responses</p>
      */
     private UserResponse convertToResponse(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());

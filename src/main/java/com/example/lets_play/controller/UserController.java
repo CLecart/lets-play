@@ -25,11 +25,11 @@ import java.util.List;
  * <ul>
  *   <li>User creation and listing: ADMIN role required</li>
  *   <li>User retrieval, update, deletion: ADMIN role OR own user account</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote All endpoints require valid JWT authentication except where explicitly noted
- * @implNote Uses method-level security with @PreAuthorize annotations
- * @security Role-based access control enforced at method level
+ * <p><strong>API Note:</strong> All endpoints require valid JWT authentication except where explicitly noted</p>
+ * <p><strong>Implementation Note:</strong> Uses method-level security with @PreAuthorize annotations</p>
+ * <p><strong>Security:</strong> Role-based access control enforced at method level</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -63,8 +63,8 @@ public class UserController {
      * @throws com.example.lets_play.exception.BadRequestException
      *         if the email is already registered
      * 
-     * @apiNote Only users with ADMIN role can create new accounts
-     * @security Requires ADMIN role authorization
+     * <p><strong>API Note:</strong> Only users with ADMIN role can create new accounts</p>
+     * <p><strong>Security:</strong> Requires ADMIN role authorization</p>
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -84,8 +84,8 @@ public class UserController {
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
      * 
-     * @apiNote Only administrators can view all users
-     * @security Requires ADMIN role authorization
+     * <p><strong>API Note:</strong> Only administrators can view all users</p>
+     * <p><strong>Security:</strong> Requires ADMIN role authorization</p>
      */
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -108,8 +108,8 @@ public class UserController {
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      * 
-     * @apiNote Users can only view their own profile unless they have ADMIN role
-     * @security Access controlled by role or ownership verification
+     * <p><strong>API Note:</strong> Users can only view their own profile unless they have ADMIN role</p>
+     * <p><strong>Security:</strong> Access controlled by role or ownership verification</p>
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
@@ -136,8 +136,8 @@ public class UserController {
      * @throws com.example.lets_play.exception.BadRequestException
      *         if trying to change email to an already existing one
      * 
-     * @apiNote Non-admin users cannot change their role even when updating their own profile
-     * @security Role changes restricted to administrators only
+     * <p><strong>API Note:</strong> Non-admin users cannot change their role even when updating their own profile</p>
+     * <p><strong>Security:</strong> Role changes restricted to administrators only</p>
      */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
@@ -169,8 +169,8 @@ public class UserController {
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      * 
-     * @apiNote Account deletion is permanent and cannot be undone
-     * @security Users can only delete their own account unless they have ADMIN role
+     * <p><strong>API Note:</strong> Account deletion is permanent and cannot be undone</p>
+     * <p><strong>Security:</strong> Users can only delete their own account unless they have ADMIN role</p>
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")

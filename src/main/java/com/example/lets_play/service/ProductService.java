@@ -23,11 +23,11 @@ import java.util.List;
  *   <li>Comprehensive CRUD operations for products</li>
  *   <li>User-specific product retrieval capabilities</li>
  *   <li>Selective updates with null-safety handling</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote Product read operations are publicly accessible, while write operations require ownership verification
- * @implNote Uses manual authorization checks based on product ownership and user roles
- * @security Owner-based access control with administrative privileges for all operations
+ * <p><strong>API Note:</strong> Product read operations are publicly accessible, while write operations require ownership verification</p>
+ * <p><strong>Implementation Note:</strong> Uses manual authorization checks based on product ownership and user roles</p>
+ * <p><strong>Security:</strong> Owner-based access control with administrative privileges for all operations</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -57,8 +57,8 @@ public class ProductService {
      * 
      * @throws jakarta.validation.ConstraintViolationException if request data is invalid
      * 
-     * @apiNote The creating user automatically becomes the product owner
-     * @implNote Product ID is automatically generated upon database persistence
+     * <p><strong>API Note:</strong> The creating user automatically becomes the product owner</p>
+     * <p><strong>Implementation Note:</strong> Product ID is automatically generated upon database persistence</p>
      */
     public Product createProduct(ProductRequest request, String userId) {
         Product product = new Product();
@@ -78,8 +78,8 @@ public class ProductService {
      * 
      * @return List of all products in the system
      * 
-     * @apiNote This method provides public access to all products
-     * @implNote No pagination or filtering is currently implemented
+     * <p><strong>API Note:</strong> This method provides public access to all products</p>
+     * <p><strong>Implementation Note:</strong> No pagination or filtering is currently implemented</p>
      */
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -96,8 +96,8 @@ public class ProductService {
      * 
      * @throws ResourceNotFoundException if no product exists with the specified ID
      * 
-     * @apiNote Public access to individual products regardless of ownership
-     * @implNote Uses Optional-based lookup with custom exception handling
+     * <p><strong>API Note:</strong> Public access to individual products regardless of ownership</p>
+     * <p><strong>Implementation Note:</strong> Uses Optional-based lookup with custom exception handling</p>
      */
     public Product getProductById(String id) {
         return productRepository.findById(id)
@@ -113,8 +113,8 @@ public class ProductService {
      * @param userId the unique identifier of the user whose products to retrieve
      * @return List of products owned by the specified user (empty list if none found)
      * 
-     * @apiNote Returns empty list if user exists but has no products
-     * @implNote Uses user ID-based filtering through repository query
+     * <p><strong>API Note:</strong> Returns empty list if user exists but has no products</p>
+     * <p><strong>Implementation Note:</strong> Uses user ID-based filtering through repository query</p>
      */
     public List<Product> getProductsByUserId(String userId) {
         return productRepository.findByUserId(userId);
@@ -137,9 +137,9 @@ public class ProductService {
      * @throws ResourceNotFoundException if no product exists with the specified ID
      * @throws BadRequestException if user tries to update a product they don't own without admin rights
      * 
-     * @apiNote Only product owners or administrators can update products
-     * @implNote Performs ownership verification before applying updates
-     * @security Owner-based access control with administrative override
+     * <p><strong>API Note:</strong> Only product owners or administrators can update products</p>
+     * <p><strong>Implementation Note:</strong> Performs ownership verification before applying updates</p>
+     * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
      */
     public Product updateProduct(String id, ProductRequest request, String currentUserId, String currentUserRole) {
         Product product = productRepository.findById(id)
@@ -177,9 +177,9 @@ public class ProductService {
      * @throws ResourceNotFoundException if no product exists with the specified ID
      * @throws BadRequestException if user tries to delete a product they don't own without admin rights
      * 
-     * @apiNote Product deletion is permanent and cannot be undone
-     * @implNote Performs ownership verification before deletion
-     * @security Owner-based access control with administrative override
+     * <p><strong>API Note:</strong> Product deletion is permanent and cannot be undone</p>
+     * <p><strong>Implementation Note:</strong> Performs ownership verification before deletion</p>
+     * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
      */
     public void deleteProduct(String id, String currentUserId, String currentUserRole) {
         Product product = productRepository.findById(id)

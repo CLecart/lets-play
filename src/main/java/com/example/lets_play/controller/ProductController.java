@@ -24,11 +24,11 @@ import java.util.List;
  *   <li>Product creation: Requires authentication</li>
  *   <li>Product listing and retrieval: Public access</li>
  *   <li>Product update/deletion: Owner or ADMIN role required</li>
- * </ul></p>
+ * </ul>
  * 
- * @apiNote Product read operations are publicly accessible, while write operations require authentication
- * @implNote Uses manual authentication checks with null-safe handling
- * @security Owner-based access control with administrative override
+ * <p><strong>API Note:</strong> Product read operations are publicly accessible, while write operations require authentication</p>
+ * <p><strong>Implementation Note:</strong> Uses manual authentication checks with null-safe handling</p>
+ * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
  * 
  * @author Zone01 Developer
  * @version 1.0
@@ -60,12 +60,11 @@ public class ProductController {
      * 
      * @throws jakarta.validation.ConstraintViolationException
      *         if the product data fails validation constraints
-     * @throws org.springframework.http.HttpStatusCodeException
      *         with status 401 if authentication is null or invalid
      * 
-     * @apiNote The authenticated user becomes the owner of the created product
-     * @implNote Performs null-safe authentication checks before processing
-     * @security Requires valid JWT authentication
+     * <p><strong>API Note:</strong> The authenticated user becomes the owner of the created product</p>
+     * <p><strong>Implementation Note:</strong> Performs null-safe authentication checks before processing</p>
+     * <p><strong>Security:</strong> Requires valid JWT authentication</p>
      */
     @PostMapping
     public ResponseEntity<Product> createProduct(
@@ -89,8 +88,8 @@ public class ProductController {
      * 
      * @return ResponseEntity containing list of all products with complete information
      * 
-     * @apiNote This endpoint is publicly accessible without authentication
-     * @implNote Returns products from all users in the system
+     * <p><strong>API Note:</strong> This endpoint is publicly accessible without authentication</p>
+     * <p><strong>Implementation Note:</strong> Returns products from all users in the system</p>
      */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -110,7 +109,7 @@ public class ProductController {
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the product with the specified ID is not found
      * 
-     * @apiNote This endpoint is publicly accessible without authentication
+     * <p><strong>API Note:</strong> This endpoint is publicly accessible without authentication</p>
      */
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable String id) {
@@ -130,8 +129,8 @@ public class ProductController {
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      * 
-     * @apiNote This endpoint is publicly accessible without authentication
-     * @implNote Returns empty list if user exists but has no products
+     * <p><strong>API Note:</strong> This endpoint is publicly accessible without authentication</p>
+     * <p><strong>Implementation Note:</strong> Returns empty list if user exists but has no products</p>
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable String userId) {
@@ -150,16 +149,15 @@ public class ProductController {
      * @param authentication the current user's authentication context
      * @return ResponseEntity containing the updated product information
      * 
-     * @throws org.springframework.http.HttpStatusCodeException
      *         with status 401 if authentication is null or invalid
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the product with the specified ID is not found
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not the owner and lacks ADMIN role
      * 
-     * @apiNote Only the product owner or administrators can update products
-     * @implNote Performs null-safe authentication checks and role validation
-     * @security Owner-based access control with administrative override
+     * <p><strong>API Note:</strong> Only the product owner or administrators can update products</p>
+     * <p><strong>Implementation Note:</strong> Performs null-safe authentication checks and role validation</p>
+     * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
      */
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(
@@ -189,16 +187,15 @@ public class ProductController {
      * @param authentication the current user's authentication context
      * @return ResponseEntity with no content indicating successful deletion
      * 
-     * @throws org.springframework.http.HttpStatusCodeException
      *         with status 401 if authentication is null or invalid
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the product with the specified ID is not found
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not the owner and lacks ADMIN role
      * 
-     * @apiNote Product deletion is permanent and cannot be undone
-     * @implNote Performs null-safe authentication checks and role validation
-     * @security Owner-based access control with administrative override
+     * <p><strong>API Note:</strong> Product deletion is permanent and cannot be undone</p>
+     * <p><strong>Implementation Note:</strong> Performs null-safe authentication checks and role validation</p>
+     * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(

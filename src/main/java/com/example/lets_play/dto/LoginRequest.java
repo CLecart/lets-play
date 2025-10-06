@@ -20,7 +20,7 @@ import lombok.Data;
  * @since 1.0
  * 
  * @see com.example.lets_play.controller.AuthController
- * @see com.example.lets_play.service.AuthService
+ * @see com.example.lets_play.controller.AuthController
  */
 @Data
 public class LoginRequest {
@@ -31,8 +31,8 @@ public class LoginRequest {
      * <p>Must be a valid email format and cannot be blank.
      * This field is used as the primary identifier for user authentication.</p>
      * 
-     * @apiNote Email format validation is performed using Jakarta Bean Validation
-     * @implNote The email is case-insensitive during authentication process
+     * <p><strong>API Note:</strong> Email format validation is performed using Jakarta Bean Validation</p>
+     * <p><strong>Implementation Note:</strong> The email is case-insensitive during authentication process</p>
      */
     @NotBlank(message = "Email is required and cannot be blank")
     @Email(message = "Email must be a valid email address format")
@@ -45,9 +45,9 @@ public class LoginRequest {
      * <p>Must meet minimum security requirements and cannot be blank.
      * The password will be validated against the stored hashed password.</p>
      * 
-     * @apiNote Password is transmitted in plain text but should be sent over HTTPS
-     * @implNote Password is never stored in plain text in the database
-     * @security Ensure this field is not logged or exposed in error messages
+     * <p><strong>API Note:</strong> Password is transmitted in plain text but should be sent over HTTPS</p>
+     * <p><strong>Implementation Note:</strong> Password is never stored in plain text in the database</p>
+     * <p><strong>Security:</strong> Ensure this field is not logged or exposed in error messages</p>
      */
     @NotBlank(message = "Password is required and cannot be blank")
     @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
