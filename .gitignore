@@ -1,4 +1,17 @@
-HELP.md
+# IntelliJ / VSCode
+.idea/
+.vscode/
+
+# Logs
+app.log
+app_test.log
+
+# Maven target
+/target/
+
+# OS files
+*.swp
+*.DS_StoreHELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
