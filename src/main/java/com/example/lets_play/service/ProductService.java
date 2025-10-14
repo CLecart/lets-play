@@ -2,6 +2,7 @@ package com.example.lets_play.service;
 
 import com.example.lets_play.dto.ProductRequest;
 import com.example.lets_play.exception.BadRequestException;
+import com.example.lets_play.exception.ForbiddenException;
 import com.example.lets_play.exception.ResourceNotFoundException;
 import com.example.lets_play.model.Product;
 import com.example.lets_play.repository.ProductRepository;
@@ -147,7 +148,7 @@ public class ProductService {
 
         // Check authorization: user can update their own products or admin can update any
         if (!product.getUserId().equals(currentUserId) && !"ADMIN".equals(currentUserRole)) {
-            throw new BadRequestException("You can only update your own products");
+            throw new ForbiddenException("You are not allowed to update this product");
         }
 
         if (request.getName() != null) {
@@ -187,7 +188,7 @@ public class ProductService {
 
         // Check authorization: user can delete their own products or admin can delete any
         if (!product.getUserId().equals(currentUserId) && !"ADMIN".equals(currentUserRole)) {
-            throw new BadRequestException("You can only delete your own products");
+            throw new ForbiddenException("You are not allowed to delete this product");
         }
 
         productRepository.delete(product);
