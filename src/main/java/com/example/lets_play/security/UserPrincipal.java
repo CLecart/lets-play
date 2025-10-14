@@ -9,6 +9,19 @@ import lombok.AllArgsConstructor;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Security principal representing an authenticated user for Spring Security.
+ *
+ * <p>This class adapts the domain {@link com.example.lets_play.model.User} to
+ * Spring Security's {@link org.springframework.security.core.userdetails.UserDetails}
+ * interface. It contains only the information necessary for authentication and
+ * authorization decisions (id, username/email, authorities).</p>
+ *
+ * <p><strong>Security:</strong> The password field here contains the hashed password
+ * from persistence and must never be serialized or logged.</p>
+ *
+ * @since 1.0
+ */
 @AllArgsConstructor
 public class UserPrincipal implements UserDetails {
     private String id;

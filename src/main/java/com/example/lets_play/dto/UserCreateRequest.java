@@ -7,6 +7,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+/**
+ * DTO for creating a new user.
+ *
+ * <p>Contains only the fields required to create a user in the system. Validation
+ * constraints are applied via Jakarta Bean Validation annotations. Passwords provided
+ * here must meet the minimum security requirements and will be encoded before
+ * persistence.</p>
+ *
+ * <p><strong>Note:</strong> The {@code role} field defaults to {@code "USER"} when omitted.</p>
+ *
+ * @since 1.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -5,6 +5,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
+/**
+ * Background service that periodically cleans up expired entries from the rate limiting cache.
+ *
+ * <p>This scheduled service invokes {@link com.example.lets_play.config.RateLimitingFilter#cleanupOldEntries}
+ * at a fixed interval to remove stale request tracking entries and prevent memory growth.
+ * The schedule is configured to run every 5 minutes by default.</p>
+ *
+ * @since 1.0
+ */
 public class RateLimitCleanupService {
 
     @Autowired

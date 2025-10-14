@@ -5,6 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+/**
+ * DTO for updating an existing user.
+ *
+ * <p>All fields are optional — only provided fields will be applied during an
+ * update operation. Role changes are restricted to administrators at the service
+ * layer and should be validated before applying.</p>
+ *
+ * @since 1.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

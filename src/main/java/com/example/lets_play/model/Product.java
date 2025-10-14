@@ -15,6 +15,15 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "products")
+/**
+ * Persistent entity representing a product managed by the application.
+ *
+ * <p>This MongoDB document stores product metadata such as name, description,
+ * price and the owner's user ID. It is used by service and repository layers
+ * for CRUD operations and should not expose sensitive information.</p>
+ *
+ * @since 1.0
+ */
 public class Product {
     
     @Id

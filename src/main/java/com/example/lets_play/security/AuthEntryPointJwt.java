@@ -16,6 +16,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+/**
+ * Authentication entry point used to return a standardized JSON response for unauthorized requests.
+ *
+ * <p>When authentication fails or a request is unauthorized, this component sends a
+ * JSON response containing status, error, message and path to the client. It centralizes
+ * unauthorized response handling for the API.</p>
+ *
+ * <p><strong>Best practices:</strong> Avoid exposing internal details in the message field
+ * to prevent information leakage. Use logging for detailed diagnostics instead.</p>
+ *
+ * @since 1.0
+ */
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthEntryPointJwt.class);

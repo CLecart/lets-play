@@ -101,6 +101,17 @@
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+			<!-- Configure the Javadoc plugin to use modern Java source level and disable doclint -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.5.0</version>
+				<configuration>
+					<source>${java.version}</source>
+					<doclint>none</doclint>
+					<quiet>true</quiet>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

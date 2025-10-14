@@ -8,6 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+/**
+ * DTO used to create or update a product.
+ *
+ * <p>Validation constraints are applied to ensure product data meets business rules.
+ * Use this class as the request body for endpoints that accept product information.</p>
+ *
+ * @since 1.0
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -8,6 +8,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+/**
+ * Application startup initializer that seeds the database with example users.
+ *
+ * <p>This component creates default administrative and regular user accounts when the
+ * application starts if they do not already exist. It is intended for development
+ * and testing environments and should be disabled or protected in production.</p>
+ *
+ * <strong>Best practices:</strong> Avoid seeding real credentials in production and
+ * instead use environment-based configuration or secure onboarding flows.
+ *
+ * @since 1.0
+ */
 public class DataInitializer implements CommandLineRunner {
 
     @Autowired
