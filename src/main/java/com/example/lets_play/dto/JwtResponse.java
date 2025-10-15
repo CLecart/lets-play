@@ -25,7 +25,7 @@ public class JwtResponse {
     private String name;
     private String email;
     private String role;
-    
+
     public JwtResponse(String accessToken, String id, String name, String email, String role) {
         this.token = accessToken;
         this.id = id;

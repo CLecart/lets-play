@@ -25,24 +25,24 @@ import lombok.AllArgsConstructor;
  * @since 1.0
  */
 public class Product {
-    
+
     @Id
     private String id;
-    
+
     @NotBlank(message = "Product name is required")
     @Size(min = 2, max = 100, message = "Product name must be between 2 and 100 characters")
     private String name;
-    
+
     @Size(max = 500, message = "Description cannot exceed 500 characters")
     private String description;
-    
+
     @NotNull(message = "Price is required")
     @Positive(message = "Price must be positive")
     private Double price;
-    
+
     @NotBlank(message = "User ID is required")
     private String userId;
-    
+
     public Product(String name, String description, Double price, String userId) {
         this.name = name;
         this.description = description;

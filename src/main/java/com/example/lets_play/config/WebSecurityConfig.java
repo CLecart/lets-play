@@ -25,11 +25,11 @@ import java.util.Arrays;
 
 /**
  * Comprehensive Spring Security configuration for JWT-based authentication and authorization.
- * 
+ *
  * <p>This configuration class sets up a complete security framework including JWT authentication,
  * CORS configuration, rate limiting, and method-level security. It implements a stateless
  * authentication system suitable for REST APIs and modern web applications.</p>
- * 
+ *
  * <p>Key security features:
  * <ul>
  *   <li>JWT-based stateless authentication with custom filters</li>
@@ -39,11 +39,11 @@ import java.util.Arrays;
  *   <li>Method-level security with @PreAuthorize annotations</li>
  *   <li>Custom authentication entry point for unauthorized access</li>
  * </ul>
- * 
+ *
  * <p><strong>API Note:</strong> This configuration disables CSRF as it's not needed for stateless JWT authentication</p>
  * <p><strong>Implementation Note:</strong> Uses filter chain approach with Spring Security 6.x configuration style</p>
  * <p><strong>Security:</strong> All passwords are encrypted with BCrypt, JWT tokens provide stateless authentication</p>
- * 
+ *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
@@ -52,10 +52,10 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
-    
+
     /**
      * Custom user details service for loading user-specific data during authentication.
-     * 
+     *
      * @see com.example.lets_play.security.UserDetailsServiceImpl
      */
     @Autowired
@@ -63,7 +63,7 @@ public class WebSecurityConfig {
 
     /**
      * Custom authentication entry point for handling unauthorized access attempts.
-     * 
+     *
      * @see com.example.lets_play.security.AuthEntryPointJwt
      */
     @Autowired
@@ -71,7 +71,7 @@ public class WebSecurityConfig {
 
     /**
      * Rate limiting filter for protecting against API abuse and DDoS attacks.
-     * 
+     *
      * @see com.example.lets_play.config.RateLimitingFilter
      */
     @Autowired
@@ -79,7 +79,7 @@ public class WebSecurityConfig {
 
     /**
      * Comma-separated list of allowed CORS origins loaded from application properties.
-     * 
+     *
      * <p><strong>API Note:</strong> Supports wildcard patterns for flexible origin matching</p>
      */
     @Value("${app.cors.allowed-origins}")
@@ -87,13 +87,13 @@ public class WebSecurityConfig {
 
     /**
      * Creates and configures the JWT authentication filter bean.
-     * 
+     *
      * <p>This filter intercepts HTTP requests to extract and validate JWT tokens
      * from the Authorization header. Valid tokens result in setting the security
      * context with the authenticated user's details.</p>
-     * 
+     *
      * @return AuthTokenFilter configured JWT authentication filter
-     * 
+     *
      * <p><strong>API Note:</strong> This filter is added before UsernamePasswordAuthenticationFilter in the chain</p>
      * @see com.example.lets_play.security.AuthTokenFilter
      */
@@ -106,15 +106,15 @@ public class WebSecurityConfig {
 
     /**
      * Exposes the authentication manager bean for manual authentication operations.
-     * 
+     *
      * <p>This manager is used primarily in the authentication controller for
      * processing login requests and generating JWT tokens upon successful authentication.</p>
-     * 
+     *
      * @param authConfig the authentication configuration provided by Spring Security
      * @return AuthenticationManager the configured authentication manager
-     * 
+     *
      * @throws Exception if authentication manager configuration fails
-     * 
+     *
      * @see com.example.lets_play.controller.AuthController#authenticateUser
      */
     @Bean
@@ -124,13 +124,13 @@ public class WebSecurityConfig {
 
     /**
      * Creates the password encoder bean for secure password hashing.
-     * 
+     *
      * <p>Uses BCrypt algorithm with default strength (10 rounds) for password hashing.
      * BCrypt is a slow, adaptive hashing function designed to remain secure against
      * rainbow table and brute-force attacks as computing power increases.</p>
-     * 
+     *
      * @return PasswordEncoder BCrypt password encoder with default strength
-     * 
+     *
      * <p><strong>API Note:</strong> Default BCrypt strength of 10 provides good security/performance balance</p>
      * <p><strong>Security:</strong> BCrypt includes salt generation and is resistant to rainbow table attacks</p>
      */
@@ -141,13 +141,13 @@ public class WebSecurityConfig {
 
     /**
      * Configures Cross-Origin Resource Sharing (CORS) for the application.
-     * 
+     *
      * <p>This configuration allows web applications running on different domains to
      * access the API. It supports configurable allowed origins, all standard HTTP methods,
      * all headers, and credential inclusion for authenticated requests.</p>
-     * 
+     *
      * @return CorsConfigurationSource configured CORS settings for the application
-     * 
+     *
      * <p><strong>API Note:</strong> Allows credentials for JWT token-based authentication</p>
      * <p><strong>Implementation Note:</strong> Uses origin patterns for flexible domain matching</p>
      * <p><strong>Security:</strong> Credential support enables secure cross-origin authenticated requests</p>
@@ -166,11 +166,11 @@ public class WebSecurityConfig {
 
     /**
      * Configures the main security filter chain for HTTP requests.
-     * 
+     *
      * <p>This method sets up the complete security configuration including CORS, CSRF protection,
      * exception handling, session management, and request authorization rules. It also configures
      * the filter chain order for proper request processing.</p>
-     * 
+     *
      * <p>Security configuration:
      * <ul>
      *   <li>CORS: Enabled with custom configuration source</li>
@@ -178,7 +178,7 @@ public class WebSecurityConfig {
      *   <li>Sessions: Stateless (no server-side session storage)</li>
      *   <li>Authentication: JWT-based with custom entry point for unauthorized access</li>
      * </ul>
-     * 
+     *
      * <p>Access rules:
      * <ul>
      *   <li>/api/auth/** - Public access (login/register)</li>
@@ -186,19 +186,19 @@ public class WebSecurityConfig {
      *   <li>/error - Public access (error handling)</li>
      *   <li>All other requests - Authentication required</li>
      * </ul>
-     * 
+     *
      * <p>Filter chain order:
      * <ol>
      *   <li>Rate limiting filter (API abuse protection)</li>
      *   <li>JWT authentication filter (token processing)</li>
      *   <li>Username/password authentication filter (Spring Security default)</li>
      * </ol>
-     * 
+     *
      * @param http the HttpSecurity configuration object
      * @return SecurityFilterChain the configured security filter chain
-     * 
+     *
      * @throws Exception if security configuration fails
-     * 
+     *
      * <p><strong>API Note:</strong> CSRF is disabled as JWT tokens provide CSRF protection for stateless APIs</p>
      * <p><strong>Implementation Note:</strong> Rate limiting filter is positioned before JWT filter for early request filtering</p>
      * <p><strong>Security:</strong> Stateless configuration prevents session fixation and reduces server memory usage</p>

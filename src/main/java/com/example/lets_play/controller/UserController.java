@@ -16,21 +16,21 @@ import java.util.List;
 
 /**
  * REST controller for managing user-related operations in the system.
- * 
+ *
  * <p>This controller provides comprehensive CRUD operations for user management, including
  * creation, retrieval, updating, and deletion of user accounts. All operations are secured
  * with role-based access control and proper authorization checks.</p>
- * 
+ *
  * <p>Access control rules:
  * <ul>
  *   <li>User creation and listing: ADMIN role required</li>
  *   <li>User retrieval, update, deletion: ADMIN role OR own user account</li>
  * </ul>
- * 
+ *
  * <p><strong>API Note:</strong> All endpoints require valid JWT authentication except where explicitly noted</p>
  * <p><strong>Implementation Note:</strong> Uses method-level security with @PreAuthorize annotations</p>
  * <p><strong>Security:</strong> Role-based access control enforced at method level</p>
- * 
+ *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
@@ -42,7 +42,7 @@ public class UserController {
 
     /**
      * Service layer for user-related business logic and database operations.
-     * 
+     *
      * @see com.example.lets_play.service.UserService
      */
     @Autowired
@@ -50,19 +50,19 @@ public class UserController {
 
     /**
      * Creates a new user account (Admin only).
-     * 
+     *
      * <p>This endpoint allows administrators to create new user accounts with specified roles
      * and permissions. The request is validated and the password is automatically encrypted
      * before storage.</p>
-     * 
+     *
      * @param request the user creation data including name, email, password, and optional role
      * @return ResponseEntity containing the created user information (without password)
-     * 
+     *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
      * @throws com.example.lets_play.exception.BadRequestException
      *         if the email is already registered
-     * 
+     *
      * <p><strong>API Note:</strong> Only users with ADMIN role can create new accounts</p>
      * <p><strong>Security:</strong> Requires ADMIN role authorization</p>
      */
@@ -75,15 +75,15 @@ public class UserController {
 
     /**
      * Retrieves all users in the system (Admin only).
-     * 
+     *
      * <p>This endpoint returns a list of all registered users in the system.
      * Sensitive information such as passwords is excluded from the response.</p>
-     * 
+     *
      * @return ResponseEntity containing list of all users without sensitive data
-     * 
+     *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
-     * 
+     *
      * <p><strong>API Note:</strong> Only administrators can view all users</p>
      * <p><strong>Security:</strong> Requires ADMIN role authorization</p>
      */
@@ -96,18 +96,18 @@ public class UserController {
 
     /**
      * Retrieves a specific user by ID (Admin or own account).
-     * 
+     *
      * <p>This endpoint allows administrators to view any user's details, or regular users
      * to view their own account information. Sensitive data is excluded from the response.</p>
-     * 
+     *
      * @param id the unique identifier of the user to retrieve
      * @return ResponseEntity containing the user information without sensitive data
-     * 
+     *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not an admin and trying to access another user's data
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
-     * 
+     *
      * <p><strong>API Note:</strong> Users can only view their own profile unless they have ADMIN role</p>
      * <p><strong>Security:</strong> Access controlled by role or ownership verification</p>
      */
@@ -120,22 +120,22 @@ public class UserController {
 
     /**
      * Updates a user's information (Admin or own account).
-     * 
+     *
      * <p>This endpoint allows administrators to update any user's information, or regular
      * users to update their own account details. Role changes are restricted to administrators.</p>
-     * 
+     *
      * @param id the unique identifier of the user to update
      * @param request the updated user information
      * @param authentication the current user's authentication context
      * @return ResponseEntity containing the updated user information
-     * 
+     *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not an admin and trying to update another user's data
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      * @throws com.example.lets_play.exception.BadRequestException
      *         if trying to change email to an already existing one
-     * 
+     *
      * <p><strong>API Note:</strong> Non-admin users cannot change their role even when updating their own profile</p>
      * <p><strong>Security:</strong> Role changes restricted to administrators only</p>
      */
@@ -145,30 +145,30 @@ public class UserController {
             @PathVariable String id,
             @Valid @RequestBody UserUpdateRequest request,
             Authentication authentication) {
-        
+
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         String currentUserId = userPrincipal.getId();
         String currentUserRole = userPrincipal.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
-        
+
         UserResponse user = userService.updateUser(id, request, currentUserId, currentUserRole);
         return ResponseEntity.ok(user);
     }
 
     /**
      * Deletes a user account (Admin or own account).
-     * 
+     *
      * <p>This endpoint allows administrators to delete any user account, or regular users
      * to delete their own account. The operation is irreversible and all associated data
      * will be permanently removed.</p>
-     * 
+     *
      * @param id the unique identifier of the user to delete
      * @return ResponseEntity with no content indicating successful deletion
-     * 
+     *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the user is not an admin and trying to delete another user's account
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
-     * 
+     *
      * <p><strong>API Note:</strong> Account deletion is permanent and cannot be undone</p>
      * <p><strong>Security:</strong> Users can only delete their own account unless they have ADMIN role</p>
      */

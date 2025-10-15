@@ -13,11 +13,11 @@ import java.util.List;
 
 /**
  * Service class for managing product-related business logic and operations.
- * 
+ *
  * <p>This service provides comprehensive product management functionality including product creation,
  * retrieval, updating, and deletion. It implements owner-based access control where users can
  * manage their own products, while administrators have full access to all products.</p>
- * 
+ *
  * <p>Key features:
  * <ul>
  *   <li>Owner-based product management with administrative override</li>
@@ -25,11 +25,11 @@ import java.util.List;
  *   <li>User-specific product retrieval capabilities</li>
  *   <li>Selective updates with null-safety handling</li>
  * </ul>
- * 
+ *
  * <p><strong>API Note:</strong> Product read operations are publicly accessible, while write operations require ownership verification</p>
  * <p><strong>Implementation Note:</strong> Uses manual authorization checks based on product ownership and user roles</p>
  * <p><strong>Security:</strong> Owner-based access control with administrative privileges for all operations</p>
- * 
+ *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
@@ -39,7 +39,7 @@ public class ProductService {
 
     /**
      * Repository for product data access operations.
-     * 
+     *
      * @see com.example.lets_play.repository.ProductRepository
      */
     @Autowired
@@ -47,17 +47,17 @@ public class ProductService {
 
     /**
      * Creates a new product associated with the specified user.
-     * 
+     *
      * <p>This method creates a new product with the provided information and associates it
      * with the authenticated user. The user becomes the owner of the product and gains
      * full management rights over it.</p>
-     * 
+     *
      * @param request the product creation data including name, description, and price
      * @param userId the unique identifier of the user creating the product
      * @return Product the created product with assigned ID and owner information
-     * 
+     *
      * @throws jakarta.validation.ConstraintViolationException if request data is invalid
-     * 
+     *
      * <p><strong>API Note:</strong> The creating user automatically becomes the product owner</p>
      * <p><strong>Implementation Note:</strong> Product ID is automatically generated upon database persistence</p>
      */
@@ -73,12 +73,12 @@ public class ProductService {
 
     /**
      * Retrieves all products in the system.
-     * 
+     *
      * <p>This method returns a complete list of all products in the system, including
      * products from all users. No filtering or access control is applied at this level.</p>
-     * 
+     *
      * @return List of all products in the system
-     * 
+     *
      * <p><strong>API Note:</strong> This method provides public access to all products</p>
      * <p><strong>Implementation Note:</strong> No pagination or filtering is currently implemented</p>
      */
@@ -88,15 +88,15 @@ public class ProductService {
 
     /**
      * Retrieves a specific product by its unique identifier.
-     * 
+     *
      * <p>This method finds and returns a product with the specified ID. If no product
      * exists with the given ID, a ResourceNotFoundException is thrown.</p>
-     * 
+     *
      * @param id the unique identifier of the product to retrieve
      * @return Product the product with the specified ID
-     * 
+     *
      * @throws ResourceNotFoundException if no product exists with the specified ID
-     * 
+     *
      * <p><strong>API Note:</strong> Public access to individual products regardless of ownership</p>
      * <p><strong>Implementation Note:</strong> Uses Optional-based lookup with custom exception handling</p>
      */
@@ -107,13 +107,13 @@ public class ProductService {
 
     /**
      * Retrieves all products owned by a specific user.
-     * 
+     *
      * <p>This method returns a list of all products created by the specified user.
      * Useful for displaying user profiles, personal product listings, or ownership-based filtering.</p>
-     * 
+     *
      * @param userId the unique identifier of the user whose products to retrieve
      * @return List of products owned by the specified user (empty list if none found)
-     * 
+     *
      * <p><strong>API Note:</strong> Returns empty list if user exists but has no products</p>
      * <p><strong>Implementation Note:</strong> Uses user ID-based filtering through repository query</p>
      */
@@ -123,21 +123,21 @@ public class ProductService {
 
     /**
      * Updates an existing product with proper ownership verification.
-     * 
+     *
      * <p>This method updates product information after verifying that the current user
      * has permission to modify the product. Users can update their own products, while
      * administrators can update any product. Updates are applied selectively - only
      * non-null fields are updated.</p>
-     * 
+     *
      * @param id the unique identifier of the product to update
      * @param request the update request containing new product information
      * @param currentUserId the ID of the currently authenticated user
      * @param currentUserRole the role of the currently authenticated user
      * @return Product the updated product with new information
-     * 
+     *
      * @throws ResourceNotFoundException if no product exists with the specified ID
      * @throws BadRequestException if user tries to update a product they don't own without admin rights
-     * 
+     *
      * <p><strong>API Note:</strong> Only product owners or administrators can update products</p>
      * <p><strong>Implementation Note:</strong> Performs ownership verification before applying updates</p>
      * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
@@ -166,18 +166,18 @@ public class ProductService {
 
     /**
      * Deletes a product with proper ownership verification.
-     * 
+     *
      * <p>This method permanently removes a product from the system after verifying that
      * the current user has permission to delete it. Users can delete their own products,
      * while administrators can delete any product. The operation is irreversible.</p>
-     * 
+     *
      * @param id the unique identifier of the product to delete
      * @param currentUserId the ID of the currently authenticated user
      * @param currentUserRole the role of the currently authenticated user
-     * 
+     *
      * @throws ResourceNotFoundException if no product exists with the specified ID
      * @throws BadRequestException if user tries to delete a product they don't own without admin rights
-     * 
+     *
      * <p><strong>API Note:</strong> Product deletion is permanent and cannot be undone</p>
      * <p><strong>Implementation Note:</strong> Performs ownership verification before deletion</p>
      * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
