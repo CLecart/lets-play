@@ -373,199 +373,91 @@ Content-Type: application/json## Security Features
 
   "category": "Electronics"5. **JWT Security**: Tokens expire after 24 hours
 
-}6. **Data Protection**: Passwords are never returned in API responses
+# Let's Play
 
-````
+Lightweight Spring Boot CRUD API (Users + Products) with JWT authentication and MongoDB.
 
-## Error Handling
+This repository is prepared for an audit: tests run, JWT secrets are configurable via environment variables, and the README and CI workflow document how to run and verify the application.
 
-#### Delete product (requires authentication)
+## Quick facts
 
-````httpThe API returns appropriate HTTP status codes and error messages:
+- Java: 21
+- Spring Boot: 3.5.6
+- Database: MongoDB (Spring Data MongoDB)
+- Build: Maven (use `./mvnw` wrapper)
 
-DELETE /api/products/{id}
+## Security / Secrets
 
-Authorization: Bearer <your-jwt-token>- **200**: Success
+- The application reads the signing secret from the environment variable `APP_JWT_SECRET`. If absent it falls back to `app.jwt.secret` in `application.properties`.
+- For HS512 the signing key must be 512 bits (64 bytes) or larger. During development the code derives a 512-bit key from shorter secrets by hashing (not recommended for production).
+- Never commit production secrets. Use environment injection or a secrets manager in production.
 
-```- **201**: Created
+## Environment variables (important)
 
-- **400**: Bad Request (validation errors)
+- `APP_JWT_SECRET` — JWT signing secret (recommended: base64 or url-safe string >= 64 bytes)
+- `SPRING_DATA_MONGODB_URI` — MongoDB connection string (default: `mongodb://localhost:27017/letsplay`)
+- `SPRING_PROFILES_ACTIVE` — e.g. `dev` / `test` / `prod`
 
-## 🏗️ Project Structure- **401**: Unauthorized (invalid credentials or token)
-
-- **403**: Forbidden (insufficient permissions)
-
-```- **404**: Not Found
-
-src/- **429**: Too Many Requests (rate limit exceeded)
-
-├── main/
-
-│   ├── java/com/example/lets_play/## Testing
-
-│   │   ├── config/
-
-│   │   │   ├── CorsConfig.javaRun the tests with:
-
-│   │   │   ├── DataInitializer.java
-
-│   │   │   ├── RateLimitingConfig.java```bash
-
-│   │   │   └── WebSecurityConfig.javamvn test
-
-│   │   ├── controller/```
-
-│   │   │   ├── AuthController.java
-
-│   │   │   ├── ProductController.java## Project Structure
-
-│   │   │   └── UserController.java
-
-│   │   ├── dto/```
-
-│   │   │   ├── AuthResponse.javasrc/
-
-│   │   │   ├── LoginRequest.java├── main/
-
-│   │   │   ├── ProductRequest.java│   ├── java/
-
-│   │   │   ├── RegisterRequest.java│   │   └── com/example/letsplay/
-
-│   │   │   └── UserUpdateRequest.java│   │       ├── LetsPlayApplication.java
-
-│   │   ├── model/│   │       ├── config/
-
-│   │   │   ├── Product.java│   │       │   └── WebSecurityConfig.java
-
-│   │   │   └── User.java│   │       ├── controller/
-
-│   │   ├── repository/│   │       │   ├── AuthController.java
-
-│   │   │   ├── ProductRepository.java│   │       │   ├── UserController.java
-
-│   │   │   └── UserRepository.java│   │       │   └── ProductController.java
-
-│   │   ├── security/│   │       ├── dto/
-
-│   │   │   ├── JwtAuthenticationEntryPoint.java│   │       │   ├── UserCreateRequest.java
-
-│   │   │   ├── JwtAuthenticationFilter.java│   │       │   ├── UserResponse.java
-
-│   │   │   └── JwtTokenProvider.java│   │       │   ├── UserUpdateRequest.java
-
-│   │   ├── service/│   │       │   ├── LoginRequest.java
-
-│   │   │   ├── ProductService.java│   │       │   ├── JwtResponse.java
-
-│   │   │   ├── UserService.java│   │       │   └── ProductRequest.java
-
-│   │   │   └── impl/│   │       ├── exception/
-
-│   │   │       ├── ProductServiceImpl.java│   │       │   ├── ResourceNotFoundException.java
-
-│   │   │       └── UserServiceImpl.java│   │       │   ├── BadRequestException.java
-
-│   │   └── LetsPlayApplication.java│   │       │   └── GlobalExceptionHandler.java
-
-│   └── resources/│   │       ├── model/
-
-│       └── application.properties│   │       │   ├── User.java
-
-└── test/│   │       │   └── Product.java
-
-    └── java/com/example/lets_play/│   │       ├── repository/
-
-        └── LetsPlayApplicationTests.java│   │       │   ├── UserRepository.java
-
-```│   │       │   └── ProductRepository.java
-
-│   │       ├── security/
-
-## 🔒 Security Features│   │       │   ├── JwtUtils.java
-
-│   │       │   ├── UserPrincipal.java
-
-- **JWT Authentication**: Stateless authentication using JSON Web Tokens│   │       │   ├── AuthTokenFilter.java
-
-- **Password Hashing**: BCrypt algorithm for secure password storage│   │       │   ├── UserDetailsServiceImpl.java
-
-- **CORS Configuration**: Configurable cross-origin resource sharing│   │       │   ├── AuthEntryPointJwt.java
-
-- **Rate Limiting**: Protection against API abuse│   │       │   └── RateLimitingFilter.java
-
-- **Input Validation**: Comprehensive validation using Jakarta Validation API│   │       └── service/
-
-│   │           ├── UserService.java
-
-## 🧪 Testing│   │           └── ProductService.java
-
-│   └── resources/
-
-Run the tests using Maven:│       └── application.properties
-
-└── test/
-
-```bash    └── java/
-
-./mvnw test        └── com/example/letsplay/
-
-```            └── controller/
-
-                └── AuthControllerTest.java
-
-## 📝 Sample Data```
-
-
-
-The application automatically initializes with sample data:## Contributing
-
-
-
-**Default Users:**1. Fork the repository
-
-- Admin user: `admin` / `admin123`2. Create a feature branch
-
-- Regular user: `user` / `user123`3. Commit your changes
-
-4. Push to the branch
-
-**Sample Products:**5. Create a Pull Request
-
-- Laptop, Smartphone, Tablet, Headphones, Camera
-
-## License
-
-## 🤝 Contributing
-
-This project is licensed under the MIT License.
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ## Local development
 
-Quick steps to run the application locally and run tests.
-
-- Copy the example env file to a local `.env` and edit values (a local `.env` may already exist in this workspace):
+1. Copy the example env file and edit values:
 
 ```bash
 cp .env.example .env
-# or edit the existing .env by hand
+# edit .env to set a secure APP_JWT_SECRET
 ```
 
-- Generate a secure `APP_JWT_SECRET` (example using Python or OpenSSL):
+2. Start a local MongoDB instance, or use Docker:
 
 ```bash
-python3 -c "import secrets,base64; print(base64.urlsafe_b64encode(secrets.token_bytes(48)).decode())"
-# or
-openssl rand -base64 48
+# systemd
+sudo systemctl start mongod
+
+# or Docker
+docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
+
+3. Build and run the application:
+
+```bash
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+The API will be available at `http://localhost:8080`.
+
+## Tests and CI
+
+- Run unit + integration tests locally with:
+
+```bash
+./mvnw test
+```
+
+- CI: the repository contains a GitHub Actions workflow that starts a MongoDB service and runs `./mvnw test`.
+
+## Docker (dev)
+
+- docker-compose is provided for development (`docker-compose.dev.yml`). It reads `.env` values. Use:
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+## Audit checklist (what I prepared)
+
+- All tests pass locally (`./mvnw test`).
+- Centralized error handling returns consistent error responses.
+- JWT secret is configurable via environment and validated in code.
+- Docker/dev artifacts and `.env.example` included; local `.env` is gitignored.
+
+---
+
+If you want, I can:
+
+- Add Testcontainers to make integration tests hermetic (CI-friendly).
+- Improve CI to publish Javadocs or run additional static analysis.
+
 
 - Important environment variables (examples):
      - `APP_JWT_SECRET` — high-entropy secret (>=32 bytes base64/url-safe recommended)
