@@ -1,0 +1,9 @@
+.mvn
+target
+.git
+.idea
+.vscode
+app.log
+app_test.log
+app_run.log
+node_modules

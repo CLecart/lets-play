@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    build: .
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/letsplay
+      - APP_JWT_SECRET=${APP_JWT_SECRET}
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:

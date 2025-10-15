@@ -295,3 +295,15 @@ nohup: ignoring input
 2025-10-14T14:14:37.646+02:00 DEBUG 158513 --- [lets-play] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/users/68ee3d4d06c24b04ad00583e
 2025-10-14T14:14:37.647+02:00 DEBUG 158513 --- [lets-play] [nio-8080-exec-6] horizationManagerBeforeMethodInterceptor : Authorizing method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.example.lets_play.controller.UserController.getUserById(java.lang.String); target is of class [com.example.lets_play.controller.UserController]
 2025-10-14T14:14:37.683+02:00 DEBUG 158513 --- [lets-play] [nio-8080-exec-6] horizationManagerBeforeMethodInterceptor : Authorized method invocation ReflectiveMethodInvocation: public org.springframework.http.ResponseEntity com.example.lets_play.controller.UserController.getUserById(java.lang.String); target is of class [com.example.lets_play.controller.UserController]
+2025-10-14T16:26:02.251+02:00  INFO 158513 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server localhost:27017
+
+com.mongodb.MongoNodeIsRecoveringException: Command failed with error 11600 (InterruptedAtShutdown): 'interrupted at shutdown' on server localhost:27017. The full response is {"ok": 0.0, "errmsg": "interrupted at shutdown", "code": 11600, "codeName": "InterruptedAtShutdown"}
+	at com.mongodb.internal.connection.ProtocolHelper.createSpecialException(ProtocolHelper.java:264) ~[mongodb-driver-core-5.5.1.jar!/:na]
+	at com.mongodb.internal.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:206) ~[mongodb-driver-core-5.5.1.jar!/:na]
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:520) ~[mongodb-driver-core-5.5.1.jar!/:na]
+	at com.mongodb.internal.connection.InternalStreamConnection.receive(InternalStreamConnection.java:469) ~[mongodb-driver-core-5.5.1.jar!/:na]
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:249) ~[mongodb-driver-core-5.5.1.jar!/:na]
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176) ~[mongodb-driver-core-5.5.1.jar!/:na]
+
+2025-10-14T16:26:02.620+02:00  INFO 158513 --- [lets-play] [ionShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-10-14T16:26:02.622+02:00  INFO 158513 --- [lets-play] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete

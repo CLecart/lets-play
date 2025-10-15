@@ -48,7 +48,8 @@ public class JwtUtils {
      * <p><strong>Implementation Note:</strong> Must be at least 256 bits (32 characters) for HMAC-SHA512</p>
      * <p><strong>Security:</strong> Should be kept secret and rotated regularly in production</p>
      */
-    @Value("${app.jwt.secret}")
+    // Prefer environment variable APP_JWT_SECRET, fall back to app.jwt.secret property
+    @Value("${APP_JWT_SECRET:${app.jwt.secret}}")
     private String jwtSecret;
 
     /**
