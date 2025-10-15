@@ -9,6 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
@@ -72,7 +75,21 @@ public class JwtUtils {
      * <p><strong>Security:</strong> Key strength depends on the length and entropy of the secret string</p>
      */
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
+
+        // Ensure key is large enough for HS512 (>= 512 bits). If the provided secret
+        // is too short, derive a 512-bit key by hashing the secret with SHA-512.
+        if (keyBytes.length * 8 < 512) {
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-512");
+                keyBytes = digest.digest(keyBytes);
+            } catch (NoSuchAlgorithmException e) {
+                // SHA-512 should always be present; rethrow as runtime if not
+                throw new IllegalStateException("SHA-512 MessageDigest not available", e);
+            }
+        }
+
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     /**
@@ -92,10 +109,11 @@ public class JwtUtils {
      * <p><strong>Security:</strong> Token is signed with HMAC-SHA512 and includes expiration time</p>
      */
     public String generateJwtToken(Authentication authentication) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+    // Use the AppUserPrincipal interface to avoid tight coupling to concrete implementation
+    AppUserPrincipal userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
 
-        return Jwts.builder()
-                .setSubject((userPrincipal.getId()))
+    return Jwts.builder()
+        .setSubject(userPrincipal.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS512)

@@ -1,5 +1,9 @@
 # Let's Play - Spring Boot CRUD API# Let's Play - Spring Boot CRUD API with MongoDB
 
+## Important: secrets
+
+This project reads the JWT signing secret from the environment variable `APP_JWT_SECRET` (preferred). If not present it falls back to `app.jwt.secret` in `application.properties`. For production use a high-entropy secret (>=32 chars) stored in a secrets manager or environment — never commit secrets to the repository.
+
 A RESTful CRUD API built with Spring Boot and MongoDB for user and product management with JWT authentication.A RESTful CRUD API built with Spring Boot and MongoDB that provides user management and product management functionalities with JWT-based authentication and authorization.
 
 ## 🚀 Features## Features
@@ -544,6 +548,53 @@ This project is licensed under the MIT License.
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Local development
+
+Quick steps to run the application locally and run tests.
+
+- Copy the example env file to a local `.env` and edit values (a local `.env` may already exist in this workspace):
+
+```bash
+cp .env.example .env
+# or edit the existing .env by hand
+```
+
+- Generate a secure `APP_JWT_SECRET` (example using Python or OpenSSL):
+
+```bash
+python3 -c "import secrets,base64; print(base64.urlsafe_b64encode(secrets.token_bytes(48)).decode())"
+# or
+openssl rand -base64 48
+```
+
+- Important environment variables (examples):
+     - `APP_JWT_SECRET` — high-entropy secret (>=32 bytes base64/url-safe recommended)
+     - `SPRING_DATA_MONGODB_URI` — e.g. `mongodb://localhost:27017/letsplay` (use `mongodb://mongo:27017/letsplay` when using docker-compose)
+     - `SPRING_PROFILES_ACTIVE` — e.g. `dev` or `test`
+
+- The local `.env` file is intentionally added to `.gitignore` to avoid committing secrets.
+
+Run the application and tests:
+
+```bash
+# Run the app with the Maven wrapper
+./mvnw spring-boot:run
+
+# Build and run the full test suite
+./mvnw clean install
+./mvnw test
+
+# Run the specific integration test used during development
+./mvnw -Dtest=com.example.lets_play.ForbiddenIntegrationTest test
+```
+
+Run with Docker Compose (uses `.env` values):
+
+```bash
+docker compose -f docker-compose.dev.yml up --build
+```
+
+If you'd like, I can perform a more thorough README cleanup to remove duplicated sections and improve formatting.
 
 ## 🆘 Troubleshooting
 

@@ -3,7 +3,7 @@ package com.example.lets_play.security;
 import com.example.lets_play.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+// org.springframework.security.core.userdetails.UserDetails import not required here
 import lombok.AllArgsConstructor;
 
 import java.util.Collection;
@@ -23,7 +23,7 @@ import java.util.Collections;
  * @since 1.0
  */
 @AllArgsConstructor
-public class UserPrincipal implements UserDetails {
+public class UserPrincipal implements AppUserPrincipal {
     private String id;
     private String name;
     private String email;

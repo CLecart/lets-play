@@ -5,7 +5,7 @@ import com.example.lets_play.dto.LoginRequest;
 import com.example.lets_play.dto.UserCreateRequest;
 import com.example.lets_play.dto.UserResponse;
 import com.example.lets_play.security.JwtUtils;
-import com.example.lets_play.security.UserPrincipal;
+import com.example.lets_play.security.AppUserPrincipal;
 import com.example.lets_play.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,13 +96,30 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserPrincipal userDetails = (UserPrincipal) authentication.getPrincipal();
+        // Use application-level principal interface for typed access to id/name
+        Object principal = authentication.getPrincipal();
+        String id = "";
+        String name = "";
+        String username = "";
+        String role = "";
+        if (principal instanceof AppUserPrincipal appPrincipal) {
+            id = appPrincipal.getId();
+            name = appPrincipal.getName();
+            username = appPrincipal.getUsername();
+            role = appPrincipal.getAuthorities().stream()
+                    .findFirst()
+                    .map(a -> a.getAuthority())
+                    .orElse("");
+        } else if (principal instanceof org.springframework.security.core.userdetails.UserDetails ud) {
+            username = ud.getUsername();
+            role = ud.getAuthorities().stream()
+                    .findFirst()
+                    .map(a -> a.getAuthority())
+                    .orElse("");
+        }
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getName(),
-                userDetails.getUsername(),
-                userDetails.getAuthorities().iterator().next().getAuthority()));
+        JwtResponse resp = new JwtResponse(jwt, id, name, username, role);
+        return ResponseEntity.ok(resp);
     }
 
     /**
