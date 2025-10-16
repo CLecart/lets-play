@@ -167,6 +167,33 @@
 				</configuration>
 			</plugin>
 			<!-- Static analysis: PMD, Checkstyle (SpotBugs removed due to resolver issues) -->
+			<!-- Generate source XRef during verify so Checkstyle can link to sources and
+			     avoid noisy "Unable to locate Source XRef" warnings when site XRef is
+			     not present. This is a small, non-invasive addition (read-only output
+			     under target/site/xref). -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>generate-xref</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jxr</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-test-xref</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>test-jxr</goal>
+						</goals>
+					
+					</execution>
+				</executions>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
@@ -193,6 +220,10 @@
 				<configuration>
 					<failOnViolation>false</failOnViolation>
 					<consoleOutput>false</consoleOutput>
+					<!-- Do not attempt to link to a JXR/XRef site. The project doesn't generate
+					     source/test XRef during CI, causing a noisy warning. Disable linking
+					     to keep the verify output clean. -->
+					<linkXRef>false</linkXRef>
 				</configuration>
 				<executions>
 					<execution>
