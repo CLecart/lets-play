@@ -1,0 +1,31 @@
+spring.application.name=lets-play
+
+# MongoDB Configuration
+spring.data.mongodb.uri=mongodb://localhost:27017/letsplay
+
+server.port=8080
+
+# JWT Configuration
+# IMPORTANT: do NOT commit production secrets to VCS. Prefer providing the secret
+# via the environment variable APP_JWT_SECRET or a secrets manager (Vault/KMS).
+# The value below is a local placeholder only and MUST NOT be used in production.
+app.jwt.secret=CHANGE_ME_DO_NOT_COMMIT
+app.jwt.expiration=86400000
+
+# Security Configuration
+app.cors.allowed-origins=http://localhost:3000,http://localhost:8080,http://localhost:8081
+app.rate-limit.requests-per-minute=60
+
+# When true the application will require HTTPS (secure channel) for all
+# requests and enable HSTS. Default is false to avoid breaking local dev
+# environments. In production set APP_SECURITY_FORCE_HTTPS=true or set
+# app.security.force-https=true in the environment-specific properties.
+app.security.force-https=false
+
+# Server Configuration
+server.error.include-message=always
+server.error.include-binding-errors=always
+
+# Logging
+logging.level.com.example.lets_play=DEBUG
+logging.level.org.springframework.security=DEBUG

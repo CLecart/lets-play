@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-@Service
 /**
  * Background service that periodically cleans up expired entries from the rate limiting cache.
  *
@@ -14,13 +13,16 @@ import org.springframework.stereotype.Service;
  *
  * @since 1.0
  */
+@Service
 public class RateLimitCleanupService {
 
     @Autowired
     private RateLimitingFilter rateLimitingFilter;
 
+    private static final long CLEANUP_RATE_MILLIS = 5 * 60 * 1000L;
+
     // Nettoie les anciennes entrées toutes les 5 minutes
-    @Scheduled(fixedRate = 300000) // 5 minutes en millisecondes
+    @Scheduled(fixedRate = CLEANUP_RATE_MILLIS) // 5 minutes en millisecondes
     public void cleanupOldRateLimitEntries() {
         rateLimitingFilter.cleanupOldEntries();
     }

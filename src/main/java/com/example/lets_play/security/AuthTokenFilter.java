@@ -18,55 +18,70 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * Servlet filter that extracts and validates JWT tokens from incoming requests.
+ * Servlet filter that extracts and validates JWT tokens from incoming
+ * requests.
  *
- * <p>This filter looks for the {@code Authorization: Bearer &lt;token&gt;} header,
- * validates the token, loads the corresponding user details, and populates the
- * Spring Security context so that downstream handlers can use authentication data.
- * It intentionally does not send authentication errors directly; it leaves exception
- * handling to the configured {@link com.example.lets_play.security.AuthEntryPointJwt}.</p>
+ * <p>Looks for the {@code Authorization: Bearer <token>} header, validates
+ * the token, loads user details, and populates the Spring Security
+ * context. Error handling is delegated to
+ * {@link com.example.lets_play.security.AuthEntryPointJwt}.</p>
  *
- * <p><strong>Security:</strong> Ensure the JWT secret used by {@link com.example.lets_play.security.JwtUtils}
- * is stored securely and rotated periodically. Do not log sensitive token contents.</p>
+ * <p><strong>Security:</strong> Keep the JWT secret secure and rotate it
+ * periodically. Do not log token contents.</p>
  *
  * @since 1.0
  */
 public class AuthTokenFilter extends OncePerRequestFilter {
+    /** Utility for JWT generation and validation. */
     @Autowired
     private JwtUtils jwtUtils;
 
+    /** Loads user details by id for authentication population. */
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    /** Logger for diagnostic messages. */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenFilter.class);
+
+    /** Expected prefix for the Authorization header. */
+    private static final String BEARER_PREFIX = "Bearer ";
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull final HttpServletRequest request,
+                                    @NonNull final HttpServletResponse response,
+                                    @NonNull final FilterChain filterChain)
+            throws ServletException, IOException {
         try {
-            String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String userId = jwtUtils.getUserIdFromJwtToken(jwt);
+            final String jwt = parseJwt(request);
 
-                UserDetails userDetails = userDetailsService.loadUserById(userId);
-                UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                final String userId = jwtUtils.getUserIdFromJwtToken(jwt);
+
+                final UserDetails userDetails = userDetailsService.loadUserById(userId);
+                final var authorities = userDetails.getAuthorities();
+
+                final UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+
+                authentication.setDetails(
+                        new WebAuthenticationDetailsSource().buildDetails(request)
+                );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+        } catch (final Exception ex) {
+            // Log full exception for diagnostics but avoid printing token content
+            LOGGER.error("Cannot set user authentication", ex);
         }
 
         filterChain.doFilter(request, response);
     }
 
-    private String parseJwt(@NonNull HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+    private String parseJwt(@NonNull final HttpServletRequest request) {
+        final String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(BEARER_PREFIX)) {
+            return headerAuth.substring(BEARER_PREFIX.length());
         }
 
         return null;

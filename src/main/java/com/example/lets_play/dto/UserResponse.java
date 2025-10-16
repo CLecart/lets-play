@@ -24,8 +24,15 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
+    /** User identifier. */
     private String id;
+
+    /** User display name. */
     private String name;
+
+    /** User email. */
     private String email;
+
+    /** User role (for example "USER"). */
     private String role;
 }

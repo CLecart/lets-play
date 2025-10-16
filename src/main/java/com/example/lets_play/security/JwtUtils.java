@@ -1,7 +1,12 @@
 package com.example.lets_play.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,24 +20,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
- * Utility class for JWT (JSON Web Token) operations including generation, validation, and parsing.
+ * Utility class for JWT operations: generation, validation, and parsing.
  *
- * <p>This class provides comprehensive JWT functionality for the authentication system, including
- * token generation from authentication objects, token validation with proper error handling,
- * and secure claim extraction. It uses HMAC-SHA512 for token signing and supports configurable
- * expiration times.</p>
+ * <p>Provides JWT generation from Authentication objects, validation with
+ * detailed error handling, and secure claim extraction. Uses HMAC-SHA512
+ * for signing and supports configurable expiration.</p>
  *
- * <p>Key features:
- * <ul>
- *   <li>Secure token generation with HMAC-SHA512 algorithm</li>
- *   <li>Comprehensive token validation with detailed error logging</li>
- *   <li>Safe claim extraction with proper exception handling</li>
- *   <li>Configurable secret key and expiration time via application properties</li>
- * </ul>
+ * <p>Features include secure signing, comprehensive validation, safe claim
+ * extraction, and configurable secrets/expiration via properties.</p>
  *
- * <p><strong>API Note:</strong> JWT tokens are stateless and contain user identification information</p>
- * <p><strong>Implementation Note:</strong> Uses JJWT library version 0.11.5 for JWT operations</p>
- * <p><strong>Security:</strong> Secret key must be at least 256 bits for HMAC-SHA512 algorithm</p>
+ * <p><strong>API Note:</strong> JWT tokens are stateless and contain user id
+ * information.</p>
  *
  * @author Zone01 Developer
  * @version 1.0
@@ -43,7 +41,18 @@ public class JwtUtils {
     /**
      * Logger instance for JWT-related operations and error reporting.
      */
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
+    /** Minimum HMAC key size in bits required for HS512. */
+    private static final int HMAC_MIN_BITS = 512;
+
+    /** Number of bits per byte. Used to compute key length in bits. */
+    private static final int BITS_PER_BYTE = 8;
+
+    /**
+     * Message digest algorithm used to expand short secrets into a
+     * fixed-length key.
+     */
+    private static final String HASH_ALGO = "SHA-512";
 
     /**
      * JWT secret key loaded from application properties.
@@ -66,30 +75,37 @@ public class JwtUtils {
     /**
      * Generates a secure signing key from the configured secret.
      *
-     * <p>This method creates a SecretKey instance using HMAC-SHA algorithm suitable
-     * for JWT token signing. The key is generated from the configured secret string.</p>
+     * <p>This method creates a SecretKey instance using an HMAC-SHA algorithm
+     * suitable for JWT token signing. The key is generated from the configured
+     * secret string.</p>
      *
      * @return SecretKey instance for JWT signing operations
      *
-     * <p><strong>Implementation Note:</strong> Uses JJWT's Keys.hmacShaKeyFor() for secure key generation</p>
-     * <p><strong>Security:</strong> Key strength depends on the length and entropy of the secret string</p>
+     * <p><strong>Implementation Note:</strong> Uses JJWT's
+     * Keys.hmacShaKeyFor() for secure key generation.</p>
+     * <p><strong>Security:</strong> Key strength depends on the length and
+     * entropy of the secret string.</p>
      */
     private SecretKey getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
 
-        // Ensure key is large enough for HS512 (>= 512 bits). If the provided secret
-        // is too short, derive a 512-bit key by hashing the secret with SHA-512.
-        if (keyBytes.length * 8 < 512) {
+        // Ensure key is large enough for HS512 (>= 512 bits). If the provided
+        // secret is too short, derive a 512-bit key by hashing the secret
+        // with SHA-512.
+        if (keyBytes.length * BITS_PER_BYTE < HMAC_MIN_BITS) {
             try {
-                MessageDigest digest = MessageDigest.getInstance("SHA-512");
+                final MessageDigest digest = MessageDigest.getInstance(HASH_ALGO);
                 keyBytes = digest.digest(keyBytes);
             } catch (NoSuchAlgorithmException e) {
-                // SHA-512 should always be present; rethrow as runtime if not
-                throw new IllegalStateException("SHA-512 MessageDigest not available", e);
+                // SHA-512 must be available on the platform; rethrow as runtime if not
+                final String err = HASH_ALGO + " MessageDigest not available";
+                throw new IllegalStateException(err, e);
             }
         }
 
-        return Keys.hmacShaKeyFor(keyBytes);
+        // Use JJWT helper to produce an HMAC-SHA key of the correct length.
+        final SecretKey signingKey = Keys.hmacShaKeyFor(keyBytes);
+        return signingKey;
     }
 
     /**
@@ -108,16 +124,20 @@ public class JwtUtils {
      * <p><strong>Implementation Note:</strong> Token subject contains the user ID for efficient user lookup</p>
      * <p><strong>Security:</strong> Token is signed with HMAC-SHA512 and includes expiration time</p>
      */
-    public String generateJwtToken(Authentication authentication) {
-    // Use the AppUserPrincipal interface to avoid tight coupling to concrete implementation
-    AppUserPrincipal userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
+    public String generateJwtToken(final Authentication authentication) {
+        // Use the AppUserPrincipal interface to avoid tight coupling to concrete implementation
+    final AppUserPrincipal userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
+
+    final long now = System.currentTimeMillis();
+    final Date issuedAt = new Date(now);
+    final Date expiryDate = new Date(now + jwtExpirationMs);
 
     return Jwts.builder()
         .setSubject(userPrincipal.getId())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
-                .compact();
+        .setIssuedAt(issuedAt)
+        .setExpiration(expiryDate)
+        .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+        .compact();
     }
 
     /**
@@ -135,11 +155,13 @@ public class JwtUtils {
      * <p><strong>Implementation Note:</strong> Performs full token validation including signature verification</p>
      * <p><strong>Security:</strong> Only tokens with valid signatures can be successfully parsed</p>
      */
-    public String getUserIdFromJwtToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
+    public String getUserIdFromJwtToken(final String token) {
+        final var builder = Jwts.parserBuilder();
+        builder.setSigningKey(getSigningKey());
+
+        final var parser = builder.build();
+
+        return parser.parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
@@ -164,23 +186,24 @@ public class JwtUtils {
      * @see UnsupportedJwtException for unsupported JWT features
      * @see IllegalArgumentException for empty or null token claims
      */
-    public boolean validateJwtToken(String authToken) {
+    public boolean validateJwtToken(final String authToken) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(authToken);
+            final var parser = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey())
+                    .build();
+
+            parser.parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
-            logger.error("Invalid JWT signature: {}", e.getMessage());
+            LOGGER.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
-            logger.error("Invalid JWT token: {}", e.getMessage());
+            LOGGER.error("Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
-            logger.error("JWT token is expired: {}", e.getMessage());
+            LOGGER.error("JWT token is expired: {}", e.getMessage());
         } catch (UnsupportedJwtException e) {
-            logger.error("JWT token is unsupported: {}", e.getMessage());
+            LOGGER.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("JWT claims string is empty: {}", e.getMessage());
+            LOGGER.error("JWT claims string is empty: {}", e.getMessage());
         }
 
         return false;

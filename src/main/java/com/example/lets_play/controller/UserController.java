@@ -3,6 +3,7 @@ package com.example.lets_play.controller;
 import com.example.lets_play.dto.UserCreateRequest;
 import com.example.lets_play.dto.UserResponse;
 import com.example.lets_play.dto.UserUpdateRequest;
+import com.example.lets_play.security.AppUserPrincipal;
 import com.example.lets_play.security.UserPrincipal;
 import com.example.lets_play.service.UserService;
 import jakarta.validation.Valid;
@@ -10,32 +11,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+// AppConstants intentionally unused at controller level; CORS configured centrally
 
 import java.util.List;
 
 /**
- * REST controller for managing user-related operations in the system.
+ * REST controller for user-related operations.
  *
- * <p>This controller provides comprehensive CRUD operations for user management, including
- * creation, retrieval, updating, and deletion of user accounts. All operations are secured
- * with role-based access control and proper authorization checks.</p>
+ * <p>Provides CRUD endpoints for user accounts. Operations are protected by
+ * role-based authorization and ownership checks.</p>
  *
- * <p>Access control rules:
- * <ul>
- *   <li>User creation and listing: ADMIN role required</li>
- *   <li>User retrieval, update, deletion: ADMIN role OR own user account</li>
- * </ul>
+ * <p><strong>Access control:</strong> ADMIN role is required for creation and
+ * listing. Retrieval, update and deletion require ADMIN role or ownership.</p>
  *
- * <p><strong>API Note:</strong> All endpoints require valid JWT authentication except where explicitly noted</p>
- * <p><strong>Implementation Note:</strong> Uses method-level security with @PreAuthorize annotations</p>
- * <p><strong>Security:</strong> Role-based access control enforced at method level</p>
+ * <p><strong>Implementation Note:</strong> Uses @PreAuthorize for method-level
+ * security.</p>
  *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -51,9 +54,9 @@ public class UserController {
     /**
      * Creates a new user account (Admin only).
      *
-     * <p>This endpoint allows administrators to create new user accounts with specified roles
-     * and permissions. The request is validated and the password is automatically encrypted
-     * before storage.</p>
+     * <p>This endpoint allows administrators to create new user accounts with
+     * specified roles and permissions. The request is validated and the
+     * password is automatically encrypted before storage.</p>
      *
      * @param request the user creation data including name, email, password, and optional role
      * @return ResponseEntity containing the created user information (without password)
@@ -68,8 +71,9 @@ public class UserController {
      */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserCreateRequest request) {
-        UserResponse user = userService.createUser(request);
+    public ResponseEntity<UserResponse> createUser(
+            @Valid @RequestBody final UserCreateRequest request) {
+        final UserResponse user = userService.createUser(request);
         return ResponseEntity.ok(user);
     }
 
@@ -90,7 +94,7 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers();
+        final List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -113,8 +117,8 @@ public class UserController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable String id) {
-        UserResponse user = userService.getUserById(id);
+    public ResponseEntity<UserResponse> getUserById(@PathVariable final String id) {
+        final UserResponse user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
 
@@ -142,15 +146,34 @@ public class UserController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
     public ResponseEntity<UserResponse> updateUser(
-            @PathVariable String id,
-            @Valid @RequestBody UserUpdateRequest request,
-            Authentication authentication) {
+        @PathVariable final String id,
+        @Valid @RequestBody final UserUpdateRequest request,
+        final Authentication authentication) {
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String currentUserId = userPrincipal.getId();
-        String currentUserRole = userPrincipal.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        final Object principal = authentication.getPrincipal();
+        final AppUserPrincipal appPrincipal;
+        if (principal instanceof AppUserPrincipal) {
+            appPrincipal = (AppUserPrincipal) principal;
+        } else if (principal instanceof UserPrincipal) {
+            // backwards compatibility with concrete implementation
+            appPrincipal = (UserPrincipal) principal;
+        } else {
+            // fallback: treat as anonymous (no id, no role)
+            throw new IllegalStateException("Unexpected principal type: " + principal.getClass());
+        }
 
-        UserResponse user = userService.updateUser(id, request, currentUserId, currentUserRole);
+        final String currentUserId = appPrincipal.getId();
+        final String currentUserRole;
+        {
+        currentUserRole = resolveRole(authentication);
+        }
+
+        final UserResponse user = userService.updateUser(
+                id,
+                request,
+                currentUserId,
+                currentUserRole
+        );
         return ResponseEntity.ok(user);
     }
 
@@ -174,8 +197,23 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+    public ResponseEntity<?> deleteUser(@PathVariable final String id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Resolve the primary role name from the authentication authorities.
+     */
+    private String resolveRole(final Authentication authentication) {
+        if (authentication == null) {
+            return "";
+        }
+
+        return authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("");
     }
 }

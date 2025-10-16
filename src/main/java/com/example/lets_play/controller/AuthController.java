@@ -14,30 +14,38 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST controller for handling authentication and user registration operations.
+ * REST controller for authentication and user registration.
  *
- * <p>This controller provides endpoints for user authentication (sign-in) and user registration (sign-up).
- * It handles JWT token generation and validation, and integrates with Spring Security for authentication
- * management.</p>
+ * <p>Provides endpoints for sign-in and sign-up. It issues JWT tokens and
+ * integrates with Spring Security for authentication management.</p>
  *
- * <p>The controller supports CORS requests with a maximum age of 3600 seconds and accepts requests from
- * any origin. All endpoints are mapped under the {@code /api/auth} path.</p>
+ * <p>Supports CORS with a configurable maxAge and accepts requests from any
+ * origin. All endpoints are under {@code /api/auth}.</p>
  *
- * <p><strong>API Note:</strong> This controller is stateless and uses JWT tokens for authentication.</p>
- * <p><strong>Implementation Note:</strong> All requests are validated using Jakarta Bean Validation annotations.</p>
- * <p><strong>Security:</strong> This controller handles sensitive authentication data and should be used over HTTPS in production.</p>
+ * <p><strong>API Note:</strong> This controller is stateless and uses JWT
+ * tokens for authentication.</p>
+ *
+ * <p><strong>Implementation Note:</strong> Requests are validated using
+ * Jakarta Bean Validation annotations.</p>
+ *
+ * <p><strong>Security:</strong> This controller handles sensitive
+ * authentication data and should be used over HTTPS in production.</p>
  *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
 
     /**
      * Spring Security's authentication manager for handling authentication requests.
@@ -45,7 +53,7 @@ public class AuthController {
      * <p><strong>Implementation Note:</strong> Configured via {@link com.example.lets_play.config.WebSecurityConfig}</p>
      */
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
     /**
      * Service layer for user-related operations including user creation and validation.
@@ -53,7 +61,7 @@ public class AuthController {
      * @see com.example.lets_play.service.UserService
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * Utility class for JWT token generation, validation, and parsing.
@@ -61,65 +69,92 @@ public class AuthController {
      * @see com.example.lets_play.security.JwtUtils
      */
     @Autowired
-    JwtUtils jwtUtils;
+    private JwtUtils jwtUtils;
 
     /**
-     * Authenticates a user and generates a JWT token for subsequent requests.
+     * Authenticate a user and generate a JWT token.
      *
-     * <p>This endpoint validates user credentials against the database and, upon successful
-     * authentication, generates a JWT token containing user information and authorities.
-     * The token is returned along with user details for client-side storage and usage.</p>
+     * <p>Validates credentials and, on success, issues a JWT containing user
+     * information and authorities. The token is returned with basic user
+     * details so clients can store it for subsequent requests.</p>
      *
-     * @param loginRequest the login credentials containing email and password
-     * @return ResponseEntity containing JWT token and user information on success
-     *
-     * @throws org.springframework.security.authentication.BadCredentialsException
-     *         if the provided credentials are invalid
-     * @throws org.springframework.security.core.userdetails.UsernameNotFoundException
-     *         if the user email is not found in the database
-     *
-     * <p><strong>API Note:</strong> The generated JWT token should be included in the Authorization header
-     *          for subsequent API calls as "Bearer {token}"</p>
-     * <p><strong>Implementation Note:</strong> Uses Spring Security's AuthenticationManager for credential validation</p>
-     * <p><strong>Security:</strong> Password is validated against BCrypt-encoded hash stored in database</p>
-     *
+     * @param loginRequest the login credentials (email + password)
+     * @return ResponseEntity with JWT token and user information on success
+     * @throws org.springframework.security.authentication.BadCredentialsException when
+     *     credentials are invalid
+     * @throws org.springframework.security.core.userdetails.UsernameNotFoundException when
+     *     the email is not found
      * @see LoginRequest
      * @see JwtResponse
-     * @see UserPrincipal
      */
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody final LoginRequest loginRequest) {
+        final Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()
+                )
+        );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        final String jwt = jwtUtils.generateJwtToken(authentication);
 
-        // Use application-level principal interface for typed access to id/name
-        Object principal = authentication.getPrincipal();
-        String id = "";
-        String name = "";
-        String username = "";
-        String role = "";
+        // Typed principal access
+    final Object principal = authentication.getPrincipal();
+    final String id;
+    final String name;
+    final String username;
+    final String role;
+
         if (principal instanceof AppUserPrincipal appPrincipal) {
             id = appPrincipal.getId();
             name = appPrincipal.getName();
             username = appPrincipal.getUsername();
-            role = appPrincipal.getAuthorities().stream()
-                    .findFirst()
-                    .map(a -> a.getAuthority())
-                    .orElse("");
+            role = resolveRoleFromPrincipal(appPrincipal);
         } else if (principal instanceof org.springframework.security.core.userdetails.UserDetails ud) {
+            id = "";
+            name = "";
             username = ud.getUsername();
-            role = ud.getAuthorities().stream()
-                    .findFirst()
-                    .map(a -> a.getAuthority())
-                    .orElse("");
+            role = resolveRoleFromAuthorities(ud);
+        } else {
+            id = "";
+            name = "";
+            username = "";
+            role = "";
         }
 
-        JwtResponse resp = new JwtResponse(jwt, id, name, username, role);
+        final JwtResponse resp = new JwtResponse(
+                jwt,
+                id,
+                name,
+                username,
+                role
+        );
         return ResponseEntity.ok(resp);
+    }
+
+    private String resolveRoleFromPrincipal(final AppUserPrincipal principal) {
+        if (principal == null) {
+            return "";
+        }
+
+        return principal.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(a -> a.getAuthority())
+                .orElse("");
+    }
+
+    private String resolveRoleFromAuthorities(final org.springframework.security.core.userdetails.UserDetails ud) {
+        if (ud == null) {
+            return "";
+        }
+
+        return ud.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(a -> a.getAuthority())
+                .orElse("");
     }
 
     /**
@@ -146,8 +181,8 @@ public class AuthController {
      * @see com.example.lets_play.service.UserService#createUser(UserCreateRequest)
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserCreateRequest signUpRequest) {
-        UserResponse user = userService.createUser(signUpRequest);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody final UserCreateRequest signUpRequest) {
+        final UserResponse user = userService.createUser(signUpRequest);
         return ResponseEntity.ok(user);
     }
 }

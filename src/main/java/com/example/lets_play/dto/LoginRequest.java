@@ -3,6 +3,7 @@ package com.example.lets_play.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.example.lets_play.config.AppConstants;
 import lombok.Data;
 
 /**
@@ -28,15 +29,18 @@ public class LoginRequest {
     /**
      * User's email address used for authentication.
      *
-     * <p>Must be a valid email format and cannot be blank.
-     * This field is used as the primary identifier for user authentication.</p>
+     * <p>Must be a valid email format and cannot be blank. It is used as the
+     * primary identifier for user authentication.</p>
      *
-     * <p><strong>API Note:</strong> Email format validation is performed using Jakarta Bean Validation</p>
-     * <p><strong>Implementation Note:</strong> The email is case-insensitive during authentication process</p>
+     * <p><strong>API Note:</strong> Email format validation is performed using
+     * Jakarta Bean Validation.</p>
      */
     @NotBlank(message = "Email is required and cannot be blank")
     @Email(message = "Email must be a valid email address format")
-    @Size(max = 100, message = "Email must not exceed 100 characters")
+    @Size(
+        max = AppConstants.EMAIL_MAX,
+        message = "Email must not exceed 100 characters"
+    )
     private String email;
 
     /**
@@ -50,6 +54,10 @@ public class LoginRequest {
      * <p><strong>Security:</strong> Ensure this field is not logged or exposed in error messages</p>
      */
     @NotBlank(message = "Password is required and cannot be blank")
-    @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters")
+    @Size(
+            min = AppConstants.USER_PASSWORD_MIN,
+            max = 100,
+            message = "Password must be between 6 and 100 characters"
+    )
     private String password;
 }

@@ -9,35 +9,40 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
 /**
- * Service used by Spring Security to load user-specific data during authentication.
+ * Service used by Spring Security to load user-specific data during
+ * authentication.
  *
- * <p>This implementation supports loading users either by email (username) or by
- * unique ID. It converts {@link com.example.lets_play.model.User} entities into
- * {@link com.example.lets_play.security.UserPrincipal} instances understood by
- * Spring Security.</p>
+ * <p>This implementation supports loading users either by email (username)
+ * or by unique ID. It converts {@link com.example.lets_play.model.User}
+ * entities into {@link com.example.lets_play.security.UserPrincipal}
+ * instances understood by Spring Security.</p>
  *
  * @since 1.0
  */
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with email: " + email));
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+    final User user = userRepository.findByEmail(email)
+        .orElseThrow(() -> new UsernameNotFoundException(
+            "User Not Found with email: " + email
+        ));
 
-        return UserPrincipal.create(user);
+    return UserPrincipal.create(user);
     }
 
     @Transactional
-    public UserDetails loadUserById(String id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with id: " + id));
+    public UserDetails loadUserById(final String id) {
+    final User user = userRepository.findById(id)
+        .orElseThrow(() -> new UsernameNotFoundException(
+            "User Not Found with id: " + id
+        ));
 
-        return UserPrincipal.create(user);
+    return UserPrincipal.create(user);
     }
 }

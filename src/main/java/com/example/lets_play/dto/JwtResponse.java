@@ -19,14 +19,40 @@ import lombok.AllArgsConstructor;
 @Data
 @AllArgsConstructor
 public class JwtResponse {
+    /** JWT access token value. */
     private String token;
+
+    /** Token type; default is "Bearer". */
     private String type = "Bearer";
+
+    /** User identifier. */
     private String id;
+
+    /** User display name. */
     private String name;
+
+    /** User email. */
     private String email;
+
+    /** User role (for example, "USER" or "ADMIN"). */
     private String role;
 
-    public JwtResponse(String accessToken, String id, String name, String email, String role) {
+    /**
+     * Convenience constructor used by controllers to build a JWT response.
+     *
+     * @param accessToken the JWT token string
+     * @param id user id
+     * @param name user display name
+     * @param email user email
+     * @param role user role
+     */
+    public JwtResponse(
+            final String accessToken,
+            final String id,
+            final String name,
+            final String email,
+            final String role
+    ) {
         this.token = accessToken;
         this.id = id;
         this.name = name;

@@ -3,7 +3,6 @@ package com.example.lets_play.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
 /**
  * Exception thrown when a request is malformed or violates business rules.
  *
@@ -12,8 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @since 1.0
  */
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadRequestException extends RuntimeException {
-    public BadRequestException(String message) {
+    public BadRequestException(final String message) {
         super(message);
     }
 }

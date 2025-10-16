@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import com.example.lets_play.config.AppConstants;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,8 @@ public class User {
     private String id;
 
     @NotBlank(message = "Name is required")
-    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
+    @Size(min = AppConstants.USER_NAME_MIN, max = AppConstants.USER_NAME_MAX,
+        message = "Name must be between 2 and 50 characters")
     private String name;
 
     @NotBlank(message = "Email is required")
@@ -35,7 +37,7 @@ public class User {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 6 characters")
+    @Size(min = AppConstants.USER_PASSWORD_MIN, message = "Password must be at least 6 characters")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -44,10 +46,13 @@ public class User {
     @NotBlank(message = "Role is required")
     private String role = "USER";
 
-    public User(String name, String email, String password, String role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
+    public User(final String nameParam,
+                final String emailParam,
+                final String passwordParam,
+                final String roleParam) {
+        this.name = nameParam;
+        this.email = emailParam;
+        this.password = passwordParam;
+        this.role = roleParam;
     }
 }

@@ -24,25 +24,22 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 /**
- * Comprehensive Spring Security configuration for JWT-based authentication and authorization.
+ * Spring Security configuration for JWT authentication and authorization.
  *
- * <p>This configuration class sets up a complete security framework including JWT authentication,
- * CORS configuration, rate limiting, and method-level security. It implements a stateless
- * authentication system suitable for REST APIs and modern web applications.</p>
+ * <p>Sets up a stateless security framework for REST APIs. The
+ * configuration includes JWT authentication, CORS, and a rate limiting
+ * filter. It also enables method-level security for fine-grained access
+ * control.</p>
  *
- * <p>Key security features:
+ * <p>Main features include:</p>
  * <ul>
  *   <li>JWT-based stateless authentication with custom filters</li>
- *   <li>BCrypt password encoding with default strength (10 rounds)</li>
- *   <li>Configurable CORS support for cross-origin requests</li>
- *   <li>Rate limiting filter for API abuse protection</li>
- *   <li>Method-level security with @PreAuthorize annotations</li>
- *   <li>Custom authentication entry point for unauthorized access</li>
+ *   <li>BCrypt password encoding</li>
+ *   <li>Configurable CORS</li>
+ *   <li>Rate limiting for abuse protection</li>
  * </ul>
  *
- * <p><strong>API Note:</strong> This configuration disables CSRF as it's not needed for stateless JWT authentication</p>
- * <p><strong>Implementation Note:</strong> Uses filter chain approach with Spring Security 6.x configuration style</p>
- * <p><strong>Security:</strong> All passwords are encrypted with BCrypt, JWT tokens provide stateless authentication</p>
+ * <p>CSRF is disabled because JWT-based stateless APIs do not require it.</p>
  *
  * @author Zone01 Developer
  * @version 1.0
@@ -59,7 +56,17 @@ public class WebSecurityConfig {
      * @see com.example.lets_play.security.UserDetailsServiceImpl
      */
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
+
+    /**
+     * Accessor for the injected user details service. Provided for Checkstyle
+     * visibility rules and potential external usage in tests.
+     *
+     * @return the configured UserDetailsServiceImpl instance
+     */
+    public UserDetailsServiceImpl getUserDetailsService() {
+        return userDetailsService;
+    }
 
     /**
      * Custom authentication entry point for handling unauthorized access attempts.
@@ -77,24 +84,33 @@ public class WebSecurityConfig {
     @Autowired
     private RateLimitingFilter rateLimitingFilter;
 
+    @Autowired
+    private HttpsEnforcerFilter httpsEnforcerFilter;
+
     /**
      * Comma-separated list of allowed CORS origins loaded from application properties.
      *
-     * <p><strong>API Note:</strong> Supports wildcard patterns for flexible origin matching</p>
+    * <p><strong>API Note:</strong> Supports wildcard patterns for flexible
+    * origin matching.</p>
      */
     @Value("${app.cors.allowed-origins}")
     private String allowedOrigins;
 
+    /** Feature flag to require HTTPS across the application when true. Default false. */
+    @Value("${app.security.force-https:false}")
+    private boolean forceHttps;
+
     /**
      * Creates and configures the JWT authentication filter bean.
      *
-     * <p>This filter intercepts HTTP requests to extract and validate JWT tokens
-     * from the Authorization header. Valid tokens result in setting the security
-     * context with the authenticated user's details.</p>
+    * <p>This filter intercepts HTTP requests to extract and validate JWT
+    * tokens from the Authorization header. Valid tokens result in setting
+    * the security context with the authenticated user's details.</p>
      *
      * @return AuthTokenFilter configured JWT authentication filter
      *
-     * <p><strong>API Note:</strong> This filter is added before UsernamePasswordAuthenticationFilter in the chain</p>
+    * <p><strong>API Note:</strong> This filter is added before
+    * UsernamePasswordAuthenticationFilter in the chain</p>
      * @see com.example.lets_play.security.AuthTokenFilter
      */
     @Bean
@@ -107,32 +123,36 @@ public class WebSecurityConfig {
     /**
      * Exposes the authentication manager bean for manual authentication operations.
      *
-     * <p>This manager is used primarily in the authentication controller for
-     * processing login requests and generating JWT tokens upon successful authentication.</p>
+    * <p>This manager is used primarily in the authentication controller for
+    * processing login requests and generating JWT tokens upon successful
+    * authentication.</p>
      *
      * @param authConfig the authentication configuration provided by Spring Security
      * @return AuthenticationManager the configured authentication manager
      *
      * @throws Exception if authentication manager configuration fails
      *
-     * @see com.example.lets_play.controller.AuthController#authenticateUser
+    * @see com.example.lets_play.controller.AuthController#authenticateUser
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
     /**
      * Creates the password encoder bean for secure password hashing.
      *
-     * <p>Uses BCrypt algorithm with default strength (10 rounds) for password hashing.
-     * BCrypt is a slow, adaptive hashing function designed to remain secure against
-     * rainbow table and brute-force attacks as computing power increases.</p>
+    * <p>Uses BCrypt algorithm with default strength (10 rounds) for password
+    * hashing. BCrypt is a slow, adaptive hashing function designed to remain
+    * secure against rainbow table and brute-force attacks as computing power
+    * increases.</p>
      *
      * @return PasswordEncoder BCrypt password encoder with default strength
      *
-     * <p><strong>API Note:</strong> Default BCrypt strength of 10 provides good security/performance balance</p>
-     * <p><strong>Security:</strong> BCrypt includes salt generation and is resistant to rainbow table attacks</p>
+    * <p><strong>API Note:</strong> Default BCrypt strength of 10 provides good
+    * security/performance balance</p>
+    * <p><strong>Security:</strong> BCrypt includes salt generation and is
+    * resistant to rainbow table attacks</p>
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -142,24 +162,42 @@ public class WebSecurityConfig {
     /**
      * Configures Cross-Origin Resource Sharing (CORS) for the application.
      *
-     * <p>This configuration allows web applications running on different domains to
-     * access the API. It supports configurable allowed origins, all standard HTTP methods,
-     * all headers, and credential inclusion for authenticated requests.</p>
+    * <p>This configuration enables web apps on different domains to access the
+    * API. It supports configurable origins, common HTTP methods, all headers,
+    * and includes credentials for authenticated requests.</p>
      *
      * @return CorsConfigurationSource configured CORS settings for the application
      *
-     * <p><strong>API Note:</strong> Allows credentials for JWT token-based authentication</p>
-     * <p><strong>Implementation Note:</strong> Uses origin patterns for flexible domain matching</p>
-     * <p><strong>Security:</strong> Credential support enables secure cross-origin authenticated requests</p>
+    * <p><strong>API Note:</strong> Allows credentials for JWT-based
+    * authentication.</p>
+    * <p><strong>Implementation Note:</strong> Uses origin patterns for flexible
+    * matching.</p>
+    * <p><strong>Security:</strong> Credential support enables secure
+    * cross-origin authenticated requests.</p>
      */
     @Bean
-    CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        // Break long expressions into local variables to satisfy LineLength checks
+    final var originList = allowedOrigins.split(",");
+    final var originPatterns = Arrays.asList(originList);
+    configuration.setAllowedOriginPatterns(originPatterns);
+
+    final var methods = Arrays.asList(
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE",
+        "OPTIONS"
+    );
+    configuration.setAllowedMethods(methods);
+
+        final var headers = Arrays.asList("*");
+        configuration.setAllowedHeaders(headers);
         configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
+        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
@@ -204,21 +242,39 @@ public class WebSecurityConfig {
      * <p><strong>Security:</strong> Stateless configuration prevents session fixation and reduces server memory usage</p>
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(csrf -> csrf.disable())
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/products/**").permitAll()
-                .requestMatchers("/error").permitAll()
-                .anyRequest().authenticated()
-            );
+    public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
+        // Configure CORS
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        // Authentication is handled by JWT filter - no need for DaoAuthenticationProvider
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(rateLimitingFilter, AuthTokenFilter.class);
+        // Disable CSRF for stateless JWT APIs
+        http.csrf(csrf -> csrf.disable());
+
+        // Custom authentication entry point for unauthorized access
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
+
+        // Stateless session management
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // Authorization rules
+        http.authorizeHttpRequests(authz -> {
+            authz.requestMatchers("/api/auth/**").permitAll();
+            authz.requestMatchers("/api/products/**").permitAll();
+            authz.requestMatchers("/error").permitAll();
+            authz.anyRequest().authenticated();
+        });
+
+    // Add HTTPS enforcer early in the chain (feature-flagged). Use a
+    // built-in anchor filter class to avoid Spring Security's "no
+    // registered order" error when referencing custom filter classes.
+    http.addFilterBefore(httpsEnforcerFilter, UsernamePasswordAuthenticationFilter.class);
+
+    // Authentication is handled by JWT filter - no need for DaoAuthenticationProvider
+    http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(rateLimitingFilter, AuthTokenFilter.class);
+
+    // HTTPS enforcement is handled by a dedicated filter (HttpsEnforcerFilter)
+    // when `app.security.force-https` is enabled. We avoid calling
+    // deprecated HttpSecurity.requiresChannel()/requiresSecure() APIs here.
 
         return http.build();
     }

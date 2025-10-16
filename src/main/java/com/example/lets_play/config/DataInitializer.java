@@ -7,29 +7,36 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Component
 /**
  * Application startup initializer that seeds the database with example users.
  *
- * <p>This component creates default administrative and regular user accounts when the
- * application starts if they do not already exist. It is intended for development
- * and testing environments and should be disabled or protected in production.</p>
+ * <p>Creates default admin and regular user accounts when the application starts,
+ * if they do not already exist. Intended for development and testing only.
+ * Disable or protect this component in production environments.</p>
  *
- * <strong>Best practices:</strong> Avoid seeding real credentials in production and
- * instead use environment-based configuration or secure onboarding flows.
+ * <p><strong>Best practices:</strong> Avoid seeding real credentials in production;
+ * prefer environment-based configuration or secure onboarding flows.</p>
  *
  * @since 1.0
  */
+@Component
 public class DataInitializer implements CommandLineRunner {
 
+    /** Repository for user persistence operations. */
     @Autowired
     private UserRepository userRepository;
 
+    /** Password encoder used to hash seeded user passwords. */
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    /**
+     * Seed initial user accounts when the application starts.
+     *
+     * @param args startup arguments (ignored)
+     */
     @Override
-    public void run(String... args) throws Exception {
+    public void run(final String... args) throws Exception {
         // Create admin user if it doesn't exist
         if (!userRepository.existsByEmail("admin@example.com")) {
             User admin = new User();

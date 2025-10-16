@@ -3,7 +3,6 @@ package com.example.lets_play.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
 /**
  * Exception thrown when a requested resource cannot be found.
  *
@@ -12,12 +11,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @since 1.0
  */
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException(String message) {
+    public ResourceNotFoundException(final String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
+    public ResourceNotFoundException(final String resourceName, final String fieldName, final Object fieldValue) {
         super(String.format("%s not found with %s : '%s'", resourceName, fieldName, fieldValue));
     }
 }

@@ -16,49 +16,87 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Centralized exception handler that returns a consistent JSON error schema.
+ * Centralized exception handler that returns a consistent JSON error
+ * schema.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * Handle BadRequestException and return JSON error body.
+     */
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequest(BadRequestException ex, HttpServletRequest request) {
-        ErrorResponse body = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
+    public ResponseEntity<ErrorResponse> handleBadRequest(final BadRequestException ex,
+                                                          final HttpServletRequest request) {
+        final int status = HttpStatus.BAD_REQUEST.value();
+        final String error = HttpStatus.BAD_REQUEST.getReasonPhrase();
+        final ErrorResponse body = new ErrorResponse(status, error, ex.getMessage(), request.getRequestURI());
+
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handle ForbiddenException and return JSON error body with 403.
+     */
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ErrorResponse> handleForbidden(ForbiddenException ex, HttpServletRequest request) {
-        ErrorResponse body = new ErrorResponse(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
+    public ResponseEntity<ErrorResponse> handleForbidden(final ForbiddenException ex,
+                                                         final HttpServletRequest request) {
+        final int status = HttpStatus.FORBIDDEN.value();
+        final String error = HttpStatus.FORBIDDEN.getReasonPhrase();
+        final ErrorResponse body = new ErrorResponse(status, error, ex.getMessage(), request.getRequestURI());
+
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
+    /**
+     * Handle ResourceNotFoundException and return 404 JSON error body.
+     */
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest request) {
-        ErrorResponse body = new ErrorResponse(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), ex.getMessage(), request.getRequestURI());
+    public ResponseEntity<ErrorResponse> handleNotFound(final ResourceNotFoundException ex,
+                                                        final HttpServletRequest request) {
+        final int status = HttpStatus.NOT_FOUND.value();
+        final String error = HttpStatus.NOT_FOUND.getReasonPhrase();
+        final ErrorResponse body = new ErrorResponse(status, error, ex.getMessage(), request.getRequestURI());
+
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Catch-all handler to avoid leaking stack traces to clients.
+     */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleAll(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAll(final Exception ex,
+                                                   final HttpServletRequest request) {
         // Catch-all to avoid leaking 5xx errors without controlled body
         // Log the exception stack trace for diagnostics
-        logger.error("Unhandled exception caught by GlobalExceptionHandler", ex);
-        ErrorResponse body = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "An unexpected error occurred", request.getRequestURI());
+        LOGGER.error("Unhandled exception caught by GlobalExceptionHandler", ex);
+
+        final int status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        final String error = HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase();
+        final String message = "An unexpected error occurred";
+        final ErrorResponse body = new ErrorResponse(status, error, message, request.getRequestURI());
+
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,
-                                                                 @NonNull HttpHeaders headers,
-                                                                 @NonNull org.springframework.http.HttpStatusCode status,
-                                                                 @NonNull WebRequest request) {
-        String errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
-                .collect(Collectors.joining(", "));
-        ErrorResponse body = new ErrorResponse(org.springframework.http.HttpStatus.BAD_REQUEST.value(), org.springframework.http.HttpStatus.BAD_REQUEST.getReasonPhrase(), errors, request.getDescription(false).replace("uri=", ""));
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull final MethodArgumentNotValidException ex,
+                   @NonNull final HttpHeaders headers,
+                   @NonNull final org.springframework.http.HttpStatusCode status,
+                   @NonNull final WebRequest request) {
+    final var fieldErrors = ex.getBindingResult().getFieldErrors();
+
+    final String errors = fieldErrors.stream()
+        .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+        .collect(Collectors.joining(", "));
+
+    final int statusCode = org.springframework.http.HttpStatus.BAD_REQUEST.value();
+    final String reason = org.springframework.http.HttpStatus.BAD_REQUEST.getReasonPhrase();
+    final String path = request.getDescription(false).replace("uri=", "");
+    final ErrorResponse body = new ErrorResponse(statusCode, reason, errors, path);
+
+    return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }

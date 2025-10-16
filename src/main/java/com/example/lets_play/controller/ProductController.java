@@ -2,42 +2,84 @@ package com.example.lets_play.controller;
 
 import com.example.lets_play.dto.ProductRequest;
 import com.example.lets_play.model.Product;
+import com.example.lets_play.security.AppUserPrincipal;
 import com.example.lets_play.security.UserPrincipal;
 import com.example.lets_play.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
- * REST controller for managing product operations in the system.
+ * REST controller for managing product operations.
  *
- * <p>This controller provides comprehensive CRUD operations for product management, including
- * creation, retrieval, updating, and deletion of products. It implements user-based ownership
- * and role-based access control for secure product management.</p>
+ * <p>This controller provides CRUD operations for products and implements
+ * owner-based and role-based access control for secure product management.</p>
  *
- * <p>Access control rules:
+ * <p>
+ * Access control rules:
  * <ul>
  *   <li>Product creation: Requires authentication</li>
  *   <li>Product listing and retrieval: Public access</li>
  *   <li>Product update/deletion: Owner or ADMIN role required</li>
  * </ul>
+ * </p>
  *
- * <p><strong>API Note:</strong> Product read operations are publicly accessible, while write operations require authentication</p>
- * <p><strong>Implementation Note:</strong> Uses manual authentication checks with null-safe handling</p>
- * <p><strong>Security:</strong> Owner-based access control with administrative override</p>
+ * <p>
+ * <strong>API Note:</strong> Product read operations are publicly accessible,
+ * while write operations require authentication.
+ * </p>
+ *
+ * <p>
+ * <strong>Implementation Note:</strong> Uses manual authentication checks with
+ * null-safe handling.
+ * </p>
+ *
+ * <p>
+ * <strong>Security:</strong> Owner-based access control with administrative
+ * override.
+ * </p>
  *
  * @author Zone01 Developer
  * @version 1.0
  * @since 2024
  */
-@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
+
+    /** HTTP status code returned when the request is not authenticated. */
+    private static final int UNAUTHORIZED = 401;
+
+    /**
+     * Resolve the authenticated principal into an AppUserPrincipal abstraction.
+     * Returns null when authentication or principal is missing or not recognized.
+     */
+    private AppUserPrincipal resolvePrincipal(final Authentication authentication) {
+        if (authentication == null || authentication.getPrincipal() == null) {
+            return null;
+        }
+
+        final Object principal = authentication.getPrincipal();
+        if (principal instanceof AppUserPrincipal) {
+            return (AppUserPrincipal) principal;
+        }
+        if (principal instanceof UserPrincipal) {
+            return (UserPrincipal) principal;
+        }
+
+        return null;
+    }
 
     /**
      * Service layer for product-related business logic and database operations.
@@ -68,15 +110,15 @@ public class ProductController {
      */
     @PostMapping
     public ResponseEntity<Product> createProduct(
-            @Valid @RequestBody ProductRequest request,
-            Authentication authentication) {
+        @Valid @RequestBody final ProductRequest request,
+        final Authentication authentication) {
 
-        if (authentication == null || authentication.getPrincipal() == null) {
-            return ResponseEntity.status(401).build();
+        final AppUserPrincipal appPrincipal = resolvePrincipal(authentication);
+        if (appPrincipal == null) {
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Product product = productService.createProduct(request, userPrincipal.getId());
+        final Product product = productService.createProduct(request, appPrincipal.getId());
         return ResponseEntity.ok(product);
     }
 
@@ -93,7 +135,7 @@ public class ProductController {
      */
     @GetMapping
     public ResponseEntity<List<Product>> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
+        final List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -103,8 +145,9 @@ public class ProductController {
      * <p>This endpoint returns detailed information about a specific product identified
      * by its unique ID. No authentication is required for viewing product details.</p>
      *
-     * @param id the unique identifier of the product to retrieve
-     * @return ResponseEntity containing the product information
+    * @param id the unique identifier of the product to retrieve
+    * @param authentication the current user's authentication context (may be null for public access)
+    * @return ResponseEntity containing the product information
      *
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the product with the specified ID is not found
@@ -112,8 +155,9 @@ public class ProductController {
      * <p><strong>API Note:</strong> This endpoint is publicly accessible without authentication</p>
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable String id) {
-        Product product = productService.getProductById(id);
+    public ResponseEntity<Product> getProductById(@PathVariable final String id, final Authentication authentication) {
+        // Authentication is optional for public read; caller info preserved when present
+        final Product product = productService.getProductById(id);
         return ResponseEntity.ok(product);
     }
 
@@ -133,8 +177,8 @@ public class ProductController {
      * <p><strong>Implementation Note:</strong> Returns empty list if user exists but has no products</p>
      */
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable String userId) {
-        List<Product> products = productService.getProductsByUserId(userId);
+    public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable final String userId) {
+        final List<Product> products = productService.getProductsByUserId(userId);
         return ResponseEntity.ok(products);
     }
 
@@ -161,19 +205,19 @@ public class ProductController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(
-            @PathVariable String id,
-            @Valid @RequestBody ProductRequest request,
-            Authentication authentication) {
+            @PathVariable final String id,
+            @Valid @RequestBody final ProductRequest request,
+            final Authentication authentication) {
 
-        if (authentication == null || authentication.getPrincipal() == null) {
-            return ResponseEntity.status(401).build();
+        final AppUserPrincipal appPrincipal = resolvePrincipal(authentication);
+        if (appPrincipal == null) {
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String currentUserId = userPrincipal.getId();
-        String currentUserRole = userPrincipal.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        final String currentUserId = appPrincipal.getId();
+        final String currentUserRole = resolveRole(authentication);
 
-        Product product = productService.updateProduct(id, request, currentUserId, currentUserRole);
+        final Product product = productService.updateProduct(id, request, currentUserId, currentUserRole);
         return ResponseEntity.ok(product);
     }
 
@@ -199,18 +243,36 @@ public class ProductController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduct(
-            @PathVariable String id,
-            Authentication authentication) {
+            @PathVariable final String id,
+            final Authentication authentication) {
 
-        if (authentication == null || authentication.getPrincipal() == null) {
-            return ResponseEntity.status(401).build();
+        final AppUserPrincipal appPrincipal = resolvePrincipal(authentication);
+        if (appPrincipal == null) {
+            return ResponseEntity.status(UNAUTHORIZED).build();
         }
 
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        String currentUserId = userPrincipal.getId();
-        String currentUserRole = userPrincipal.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        final String currentUserId = appPrincipal.getId();
+        final String currentUserRole = resolveRole(authentication);
 
         productService.deleteProduct(id, currentUserId, currentUserRole);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Resolve the primary role name from the authentication authorities.
+     *
+     * <p>Returns empty string when no authority is present. Strips the
+     * "ROLE_" prefix when present to normalize role names used by services.</p>
+     */
+    private String resolveRole(final Authentication authentication) {
+        if (authentication == null) {
+            return "";
+        }
+
+        return authentication.getAuthorities()
+                .stream()
+                .findFirst()
+                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .orElse("");
     }
 }
