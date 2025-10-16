@@ -4,15 +4,17 @@ import lombok.Data;
 import lombok.AllArgsConstructor;
 
 /**
- * Authentication response containing a JWT access token and basic user information.
+ * Authentication response containing a JWT access token and basic
+ * user information.
  *
- * <p>After successful authentication, the server returns this DTO. Clients must
- * use the {@code token} value and include it in the {@code Authorization} header
- * for subsequent requests: {@code Authorization: Bearer &lt;token&gt;}.</p>
+ * <p>After successful authentication, the server returns this DTO. Clients
+ * must use the {@code token} value and include it in the
+ * {@code Authorization} header for subsequent requests:
+ * {@code Authorization: Bearer &lt;token&gt;}.</p>
  *
- * <p><strong>Security:</strong> Treat the token as a secret; do not log it or expose it
- * in URLs. Tokens should be stored securely on the client (for example, an HTTP-only cookie
- * or secure storage provided by the client platform).</p>
+ * <p><strong>Security:</strong> Treat the token as a secret; do not log it or
+ * expose it in URLs. Tokens should be stored securely on the client
+ * (for example, in an HTTP-only cookie or secure platform storage).</p>
  *
  * @since 1.0
  */
@@ -40,23 +42,23 @@ public class JwtResponse {
     /**
      * Convenience constructor used by controllers to build a JWT response.
      *
-     * @param accessToken the JWT token string
-     * @param id user id
-     * @param name user display name
-     * @param email user email
-     * @param role user role
+    * @param accessToken the JWT token string
+    * @param userId the user identifier
+    * @param userName the user display name
+    * @param userEmail the user email address
+    * @param userRole the user's role
      */
     public JwtResponse(
             final String accessToken,
-            final String id,
-            final String name,
-            final String email,
-            final String role
+            final String userId,
+            final String userName,
+            final String userEmail,
+            final String userRole
     ) {
         this.token = accessToken;
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.role = role;
+        this.id = userId;
+        this.name = userName;
+        this.email = userEmail;
+        this.role = userRole;
     }
 }

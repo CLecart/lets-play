@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,11 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for authentication and user registration.
  *
- * <p>Provides endpoints for sign-in and sign-up. It issues JWT tokens and
- * integrates with Spring Security for authentication management.</p>
+ * <p>
+ * Provides endpoints for sign-in and sign-up. It issues JWT tokens and
+ * integrates with Spring Security for authentication management.
+ * </p>
  *
- * <p>Supports CORS with a configurable maxAge and accepts requests from any
- * origin. All endpoints are under {@code /api/auth}.</p>
+ * <p>
+ * Supports CORS with a configurable maxAge and accepts requests from any
+ * origin. All endpoints are under {@code /api/auth}.
+ * </p>
  *
  * <p><strong>API Note:</strong> This controller is stateless and uses JWT
  * tokens for authentication.</p>
@@ -48,15 +53,18 @@ public class AuthController {
 
 
     /**
-     * Spring Security's authentication manager for handling authentication requests.
+     * Spring Security's authentication manager for handling authentication
+     * requests.
      *
-     * <p><strong>Implementation Note:</strong> Configured via {@link com.example.lets_play.config.WebSecurityConfig}</p>
+     * <p><strong>Implementation Note:</strong> Configured via
+     * {@link com.example.lets_play.config.WebSecurityConfig}</p>
      */
     @Autowired
     private AuthenticationManager authenticationManager;
 
     /**
-     * Service layer for user-related operations including user creation and validation.
+     * Service layer for user-related operations including user creation
+     * and validation.
      *
      * @see com.example.lets_play.service.UserService
      */
@@ -72,46 +80,51 @@ public class AuthController {
     private JwtUtils jwtUtils;
 
     /**
-     * Authenticate a user and generate a JWT token.
+    * Authenticate a user and generate a JWT token.
+    *
+    * <p>
+    * Validates credentials and, on success, issues a JWT containing user
+    * information and authorities. The token is returned with basic user
+    * details so clients can store it for subsequent requests.
+    * </p>
      *
-     * <p>Validates credentials and, on success, issues a JWT containing user
-     * information and authorities. The token is returned with basic user
-     * details so clients can store it for subsequent requests.</p>
-     *
-     * @param loginRequest the login credentials (email + password)
-     * @return ResponseEntity with JWT token and user information on success
-     * @throws org.springframework.security.authentication.BadCredentialsException when
-     *     credentials are invalid
-     * @throws org.springframework.security.core.userdetails.UsernameNotFoundException when
-     *     the email is not found
+    * @param loginRequest the login credentials (email + password)
+    * @return a response entity with JWT token and user information on success
+    * @throws BadCredentialsException when credentials are invalid
+    * @throws UsernameNotFoundException when the email is not found
      * @see LoginRequest
      * @see JwtResponse
      */
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody final LoginRequest loginRequest) {
-        final Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
+    public ResponseEntity<?> authenticateUser(
+            @Valid @RequestBody final LoginRequest loginRequest
+    ) {
+    final UsernamePasswordAuthenticationToken authToken =
+        new UsernamePasswordAuthenticationToken(
+            loginRequest.getEmail(),
+            loginRequest.getPassword()
         );
+
+    final Authentication authentication = authenticationManager.authenticate(
+        authToken
+    );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String jwt = jwtUtils.generateJwtToken(authentication);
 
         // Typed principal access
-    final Object principal = authentication.getPrincipal();
-    final String id;
-    final String name;
-    final String username;
-    final String role;
+        final Object principal = authentication.getPrincipal();
+        final String id;
+        final String name;
+        final String username;
+        final String role;
 
         if (principal instanceof AppUserPrincipal appPrincipal) {
             id = appPrincipal.getId();
             name = appPrincipal.getName();
             username = appPrincipal.getUsername();
             role = resolveRoleFromPrincipal(appPrincipal);
-        } else if (principal instanceof org.springframework.security.core.userdetails.UserDetails ud) {
+    } else if (principal instanceof UserDetails ud) {
             id = "";
             name = "";
             username = ud.getUsername();
@@ -137,51 +150,61 @@ public class AuthController {
         if (principal == null) {
             return "";
         }
-
-        return principal.getAuthorities()
+        final var opt = principal.getAuthorities()
                 .stream()
-                .findFirst()
-                .map(a -> a.getAuthority())
-                .orElse("");
+                .findFirst();
+
+        return opt.map(a -> a.getAuthority()).orElse("");
     }
 
-    private String resolveRoleFromAuthorities(final org.springframework.security.core.userdetails.UserDetails ud) {
+    private String resolveRoleFromAuthorities(
+            final org.springframework.security.core.userdetails.UserDetails ud
+    ) {
         if (ud == null) {
             return "";
         }
-
-        return ud.getAuthorities()
+        final var opt = ud.getAuthorities()
                 .stream()
-                .findFirst()
-                .map(a -> a.getAuthority())
-                .orElse("");
+                .findFirst();
+
+        return opt.map(a -> a.getAuthority()).orElse("");
     }
 
     /**
      * Registers a new user account in the system.
      *
-     * <p>This endpoint creates a new user account with the provided information.
-     * It validates the request data, checks for email uniqueness, encrypts the password
-     * using BCrypt, and stores the user in the database with appropriate default roles.</p>
+     * <p>
+     * This endpoint creates a new user account with the provided information.
+     * It validates the request data, checks for email uniqueness, encrypts the
+     * password using BCrypt, and stores the user in the database with
+     * appropriate default roles.
+     * </p>
      *
-     * @param signUpRequest the user registration data including name, email, and password
-     * @return ResponseEntity containing the created user information (without password)
+     * @param signUpRequest the user registration data including name, email,
+     *                      and password
+     * @return ResponseEntity containing the created user information
+     *         (without password)
      *
-     * @throws com.example.lets_play.exception.BadRequestException
-     *         if the email is already registered or validation fails
-     * @throws jakarta.validation.ConstraintViolationException
-     *         if the request data fails validation constraints
+     * @throws com.example.lets_play.exception.BadRequestException if the email
+     *         is already registered or validation fails
+     * @throws jakarta.validation.ConstraintViolationException if the request
+     *         data fails validation constraints
      *
-     * <p><strong>API Note:</strong> Newly registered users are assigned the "USER" role by default</p>
-     * <p><strong>Implementation Note:</strong> Password is automatically encrypted using BCrypt before storage</p>
-     * <p><strong>Security:</strong> Email uniqueness is enforced at both application and database levels</p>
+     * <p><strong>API Note:</strong> Newly registered users are assigned the
+     * "USER" role by default</p>
+     * <p><strong>Implementation Note:</strong> Password is automatically
+     * encrypted using BCrypt before storage</p>
+     * <p><strong>Security:</strong> Email uniqueness is enforced at both
+     * application and database levels</p>
      *
      * @see UserCreateRequest
      * @see UserResponse
-     * @see com.example.lets_play.service.UserService#createUser(UserCreateRequest)
+    * @see UserService#createUser(UserCreateRequest)
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody final UserCreateRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(
+            @Valid @RequestBody final UserCreateRequest signUpRequest
+    ) {
         final UserResponse user = userService.createUser(signUpRequest);
         return ResponseEntity.ok(user);
     }

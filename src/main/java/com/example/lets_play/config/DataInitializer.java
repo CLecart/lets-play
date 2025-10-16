@@ -6,15 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Application startup initializer that seeds the database with example users.
  *
- * <p>Creates default admin and regular user accounts when the application starts,
+ * <p>
+ * Creates default admin and regular user accounts when the application
+ * starts,
  * if they do not already exist. Intended for development and testing only.
  * Disable or protect this component in production environments.</p>
  *
- * <p><strong>Best practices:</strong> Avoid seeding real credentials in production;
+ * <p>
+ * <strong>Best practices:</strong> Avoid seeding real credentials in
+ * production;
  * prefer environment-based configuration or secure onboarding flows.</p>
  *
  * @since 1.0
@@ -22,6 +28,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+    /** SLF4J logger for startup messages. */
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(DataInitializer.class);
     /** Repository for user persistence operations. */
     @Autowired
     private UserRepository userRepository;
@@ -45,7 +54,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setRole("ADMIN");
             userRepository.save(admin);
-            System.out.println("Admin user created: admin@example.com / admin123");
+            LOGGER.info("Admin user created: admin@example.com / admin123");
         }
 
         // Create regular user if it doesn't exist
@@ -56,7 +65,7 @@ public class DataInitializer implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode("user123"));
             user.setRole("USER");
             userRepository.save(user);
-            System.out.println("Regular user created: user@example.com / user123");
+            LOGGER.info("Regular user created: user@example.com / user123");
         }
     }
 }

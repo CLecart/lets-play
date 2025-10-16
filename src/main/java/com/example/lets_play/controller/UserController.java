@@ -4,7 +4,6 @@ import com.example.lets_play.dto.UserCreateRequest;
 import com.example.lets_play.dto.UserResponse;
 import com.example.lets_play.dto.UserUpdateRequest;
 import com.example.lets_play.security.AppUserPrincipal;
-import com.example.lets_play.security.UserPrincipal;
 import com.example.lets_play.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-// AppConstants intentionally unused at controller level; CORS configured centrally
+// AppConstants intentionally unused at controller level.
+// CORS configured centrally
 
 import java.util.List;
 
@@ -29,11 +29,12 @@ import java.util.List;
  * <p>Provides CRUD endpoints for user accounts. Operations are protected by
  * role-based authorization and ownership checks.</p>
  *
- * <p><strong>Access control:</strong> ADMIN role is required for creation and
- * listing. Retrieval, update and deletion require ADMIN role or ownership.</p>
+ * <p><strong>Access control:</strong> ADMIN role is required for creation
+ * and listing. Retrieval, update and deletion require ADMIN role or
+ * ownership.</p>
  *
- * <p><strong>Implementation Note:</strong> Uses @PreAuthorize for method-level
- * security.</p>
+ * <p><strong>Implementation Note:</strong> Uses {@code @PreAuthorize}
+ * for method-level security.</p>
  *
  * @author Zone01 Developer
  * @version 1.0
@@ -54,19 +55,23 @@ public class UserController {
     /**
      * Creates a new user account (Admin only).
      *
-     * <p>This endpoint allows administrators to create new user accounts with
-     * specified roles and permissions. The request is validated and the
-     * password is automatically encrypted before storage.</p>
+     * <p>This endpoint allows administrators to create new user accounts.
+     * The request is validated and the password is automatically encrypted
+     * before storage. Roles and permissions may be supplied as part of the
+     * request.</p>
      *
-     * @param request the user creation data including name, email, password, and optional role
-     * @return ResponseEntity containing the created user information (without password)
+    * @param request the user creation data including name,
+    *                email, password and optional role
+     * @return ResponseEntity containing the created user information
+     *         (without password)
      *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
      * @throws com.example.lets_play.exception.BadRequestException
      *         if the email is already registered
      *
-     * <p><strong>API Note:</strong> Only users with ADMIN role can create new accounts</p>
+     * <p><strong>API Note:</strong> Only users with ADMIN role can create
+     * new accounts</p>
      * <p><strong>Security:</strong> Requires ADMIN role authorization</p>
      */
     @PostMapping
@@ -80,10 +85,11 @@ public class UserController {
     /**
      * Retrieves all users in the system (Admin only).
      *
-     * <p>This endpoint returns a list of all registered users in the system.
-     * Sensitive information such as passwords is excluded from the response.</p>
+     * <p>This endpoint returns a list of all registered users. Sensitive
+     * information such as passwords is excluded from the response.</p>
      *
-     * @return ResponseEntity containing list of all users without sensitive data
+     * @return ResponseEntity containing list of all users without sensitive
+     *         data
      *
      * @throws org.springframework.security.access.AccessDeniedException
      *         if the current user lacks ADMIN role
@@ -101,23 +107,31 @@ public class UserController {
     /**
      * Retrieves a specific user by ID (Admin or own account).
      *
-     * <p>This endpoint allows administrators to view any user's details, or regular users
-     * to view their own account information. Sensitive data is excluded from the response.</p>
+     * <p>This endpoint allows administrators to view any user's details,
+     * or regular users to view their own account information. Sensitive
+     * data is excluded from the response.</p>
      *
      * @param id the unique identifier of the user to retrieve
-     * @return ResponseEntity containing the user information without sensitive data
+     * @return ResponseEntity containing the user information without
+     *         sensitive data
      *
      * @throws org.springframework.security.access.AccessDeniedException
-     *         if the user is not an admin and trying to access another user's data
+     *         if the user is not an admin and trying to access another
+     *         user's data
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      *
-     * <p><strong>API Note:</strong> Users can only view their own profile unless they have ADMIN role</p>
-     * <p><strong>Security:</strong> Access controlled by role or ownership verification</p>
+     * <p><strong>API Note:</strong> Users can only view their own profile
+     * unless they have ADMIN role</p>
+     * <p><strong>Security:</strong> Access controlled by role or ownership
+     * verification</p>
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable final String id) {
+    @PreAuthorize(
+        "hasRole('ADMIN') or #id == authentication.principal.id"
+    )
+    public ResponseEntity<UserResponse> getUserById(
+        @PathVariable final String id) {
         final UserResponse user = userService.getUserById(id);
         return ResponseEntity.ok(user);
     }
@@ -125,8 +139,9 @@ public class UserController {
     /**
      * Updates a user's information (Admin or own account).
      *
-     * <p>This endpoint allows administrators to update any user's information, or regular
-     * users to update their own account details. Role changes are restricted to administrators.</p>
+     * <p>This endpoint allows administrators to update any user's
+     * information, or regular users to update their own account
+     * details. Role changes are restricted to administrators.</p>
      *
      * @param id the unique identifier of the user to update
      * @param request the updated user information
@@ -134,69 +149,80 @@ public class UserController {
      * @return ResponseEntity containing the updated user information
      *
      * @throws org.springframework.security.access.AccessDeniedException
-     *         if the user is not an admin and trying to update another user's data
+     *         if the user is not an admin and trying to update another
+     *         user's data
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      * @throws com.example.lets_play.exception.BadRequestException
      *         if trying to change email to an already existing one
      *
-     * <p><strong>API Note:</strong> Non-admin users cannot change their role even when updating their own profile</p>
-     * <p><strong>Security:</strong> Role changes restricted to administrators only</p>
+     * <p><strong>API Note:</strong> Non-admin users cannot change their
+     * role even when updating their own profile</p>
+     * <p><strong>Security:</strong> Role changes restricted to
+     * administrators only</p>
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    @PreAuthorize(
+        "hasRole('ADMIN') or #id == authentication.principal.id"
+    )
     public ResponseEntity<UserResponse> updateUser(
-        @PathVariable final String id,
-        @Valid @RequestBody final UserUpdateRequest request,
-        final Authentication authentication) {
+            @PathVariable final String id,
+            @Valid @RequestBody final UserUpdateRequest request,
+            final Authentication authentication
+    ) {
 
         final Object principal = authentication.getPrincipal();
         final AppUserPrincipal appPrincipal;
+
         if (principal instanceof AppUserPrincipal) {
             appPrincipal = (AppUserPrincipal) principal;
-        } else if (principal instanceof UserPrincipal) {
+        } else if (principal instanceof AppUserPrincipal) {
             // backwards compatibility with concrete implementation
-            appPrincipal = (UserPrincipal) principal;
+            appPrincipal = (AppUserPrincipal) principal;
         } else {
             // fallback: treat as anonymous (no id, no role)
-            throw new IllegalStateException("Unexpected principal type: " + principal.getClass());
+            final Class<?> pc = principal.getClass();
+            throw new IllegalStateException("Unexpected principal type: " + pc);
         }
 
         final String currentUserId = appPrincipal.getId();
-        final String currentUserRole;
-        {
-        currentUserRole = resolveRole(authentication);
-        }
+        final String currentUserRole = resolveRole(authentication);
 
-        final UserResponse user = userService.updateUser(
-                id,
+        final UserResponse user = userService.updateUser(id,
                 request,
                 currentUserId,
-                currentUserRole
-        );
+                currentUserRole);
+
         return ResponseEntity.ok(user);
     }
 
     /**
      * Deletes a user account (Admin or own account).
      *
-     * <p>This endpoint allows administrators to delete any user account, or regular users
-     * to delete their own account. The operation is irreversible and all associated data
-     * will be permanently removed.</p>
+    * <p>
+    * This endpoint allows administrators to delete any user account, or
+    * regular users to delete their own account. The operation is
+    * irreversible and all associated data will be permanently removed.
+    * </p>
      *
      * @param id the unique identifier of the user to delete
      * @return ResponseEntity with no content indicating successful deletion
      *
-     * @throws org.springframework.security.access.AccessDeniedException
-     *         if the user is not an admin and trying to delete another user's account
+    * @throws org.springframework.security.access.AccessDeniedException if
+    *         the user is not an admin and trying to delete another user's
+    *         account
      * @throws com.example.lets_play.exception.ResourceNotFoundException
      *         if the user with the specified ID is not found
      *
-     * <p><strong>API Note:</strong> Account deletion is permanent and cannot be undone</p>
-     * <p><strong>Security:</strong> Users can only delete their own account unless they have ADMIN role</p>
+    * <p><strong>API Note:</strong> Account deletion is permanent and
+    * cannot be undone</p>
+    * <p><strong>Security:</strong> Users can only delete their own
+    * account unless they have ADMIN role</p>
      */
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    @PreAuthorize(
+        "hasRole('ADMIN') or #id == authentication.principal.id"
+    )
     public ResponseEntity<?> deleteUser(@PathVariable final String id) {
         userService.deleteUser(id);
         return ResponseEntity.ok().build();
@@ -204,16 +230,25 @@ public class UserController {
 
     /**
      * Resolve the primary role name from the authentication authorities.
+     *
+     * @param authentication current authentication context (may be null)
+     * @return the primary role name without the {@code ROLE_} prefix or an
+     *         empty string when no authority is present
      */
     private String resolveRole(final Authentication authentication) {
         if (authentication == null) {
             return "";
         }
 
-        return authentication.getAuthorities()
+        final var firstAuthority = authentication.getAuthorities()
                 .stream()
-                .findFirst()
-                .map(a -> a.getAuthority().replace("ROLE_", ""))
+                .findFirst();
+
+        return firstAuthority
+                .map(a -> {
+                    final String auth = a.getAuthority();
+                    return auth.replace("ROLE_", "");
+                })
                 .orElse("");
     }
 }

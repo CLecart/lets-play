@@ -12,8 +12,11 @@ import lombok.AllArgsConstructor;
 /**
  * DTO used to create or update a product.
  *
- * <p>Validation constraints are applied to ensure product data meets business rules.
- * Use this class as the request body for endpoints that accept product information.</p>
+ * <p>
+ * Validation constraints are applied to ensure product data meets business
+ * rules. Use this class as the request body for endpoints that accept
+ * product information.
+ * </p>
  *
  * @since 1.0
  */
@@ -31,7 +34,10 @@ public class ProductRequest {
     private String name;
 
     /** Optional long-form description of the product. */
-    @Size(max = AppConstants.PRODUCT_DESCRIPTION_MAX, message = "Description cannot exceed 500 characters")
+    @Size(
+        max = AppConstants.PRODUCT_DESCRIPTION_MAX,
+        message = "Description cannot exceed 500 characters"
+    )
     private String description;
 
     /** Price of the product in the configured currency (must be positive). */

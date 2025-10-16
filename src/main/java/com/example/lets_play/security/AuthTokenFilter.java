@@ -29,6 +29,10 @@ import java.io.IOException;
  * <p><strong>Security:</strong> Keep the JWT secret secure and rotate it
  * periodically. Do not log token contents.</p>
  *
+ * <p><strong>Extension:</strong> This class may be extended but subclasses
+ * must preserve the authentication population behavior performed by
+ * {@link #doFilterInternal}.</p>
+ *
  * @since 1.0
  */
 public class AuthTokenFilter extends OncePerRequestFilter {
@@ -41,11 +45,18 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
 
     /** Logger for diagnostic messages. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenFilter.class);
+    private static final Logger LOGGER = LoggerFactory
+        .getLogger(AuthTokenFilter.class);
 
     /** Expected prefix for the Authorization header. */
     private static final String BEARER_PREFIX = "Bearer ";
 
+    /**
+     * Inspect the request for a Bearer JWT, validate it, and populate the
+     * SecurityContext if valid. This method intentionally keeps behavior
+     * minimal and is safe to override only if authentication population is
+     * preserved.
+     */
     @Override
     protected void doFilterInternal(@NonNull final HttpServletRequest request,
                                     @NonNull final HttpServletResponse response,
@@ -57,20 +68,28 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 final String userId = jwtUtils.getUserIdFromJwtToken(jwt);
 
-                final UserDetails userDetails = userDetailsService.loadUserById(userId);
+                final UserDetails userDetails = userDetailsService
+                    .loadUserById(userId);
+
                 final var authorities = userDetails.getAuthorities();
 
                 final UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+                    new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        authorities
+                    );
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+                final WebAuthenticationDetailsSource detailsSource =
+                    new WebAuthenticationDetailsSource();
+                authentication.setDetails(detailsSource.buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
             }
         } catch (final Exception ex) {
-            // Log full exception for diagnostics but avoid printing token content
+            // Log full exception for diagnostics. Avoid printing token
+            // content which may contain sensitive information.
             LOGGER.error("Cannot set user authentication", ex);
         }
 
@@ -80,7 +99,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private String parseJwt(@NonNull final HttpServletRequest request) {
         final String headerAuth = request.getHeader("Authorization");
 
-        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith(BEARER_PREFIX)) {
+        final boolean hasText = StringUtils.hasText(headerAuth);
+        final boolean startsWithBearer = headerAuth != null
+            && headerAuth.startsWith(BEARER_PREFIX);
+
+        if (hasText && startsWithBearer && headerAuth != null) {
             return headerAuth.substring(BEARER_PREFIX.length());
         }
 

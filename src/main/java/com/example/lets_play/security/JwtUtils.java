@@ -20,28 +20,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 /**
- * Utility class for JWT operations: generation, validation, and parsing.
+ * JWT utilities for token generation, parsing and validation.
  *
- * <p>Provides JWT generation from Authentication objects, validation with
- * detailed error handling, and secure claim extraction. Uses HMAC-SHA512
- * for signing and supports configurable expiration.</p>
- *
- * <p>Features include secure signing, comprehensive validation, safe claim
- * extraction, and configurable secrets/expiration via properties.</p>
- *
- * <p><strong>API Note:</strong> JWT tokens are stateless and contain user id
- * information.</p>
- *
- * @author Zone01 Developer
- * @version 1.0
- * @since 2024
+ * <p>Uses HMAC-SHA512 for signing and supports configurable
+ * expiration and secrets.</p>
  */
 @Component
 public class JwtUtils {
     /**
      * Logger instance for JWT-related operations and error reporting.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
+    private static final Logger LOGGER =
+        LoggerFactory.getLogger(JwtUtils.class);
     /** Minimum HMAC key size in bits required for HS512. */
     private static final int HMAC_MIN_BITS = 512;
 
@@ -54,79 +44,63 @@ public class JwtUtils {
      */
     private static final String HASH_ALGO = "SHA-512";
 
-    /**
-     * JWT secret key loaded from application properties.
-     *
-     * <p><strong>Implementation Note:</strong> Must be at least 256 bits (32 characters) for HMAC-SHA512</p>
-     * <p><strong>Security:</strong> Should be kept secret and rotated regularly in production</p>
-     */
-    // Prefer environment variable APP_JWT_SECRET, fall back to app.jwt.secret property
+    /** JWT secret key loaded from application properties. */
+    // Prefer environment variable APP_JWT_SECRET. Fall back to
+    // the app.jwt.secret property when not present.
     @Value("${APP_JWT_SECRET:${app.jwt.secret}}")
     private String jwtSecret;
 
     /**
-     * JWT token expiration time in milliseconds loaded from application properties.
-     *
-     * <p><strong>API Note:</strong> Default is typically 24 hours (86400000ms)</p>
+     * JWT token expiration time in milliseconds from application
+     * properties.
      */
     @Value("${app.jwt.expiration}")
     private int jwtExpirationMs;
 
     /**
-     * Generates a secure signing key from the configured secret.
+     * Generates a SecretKey suitable for HMAC-SHA signing from the
+     * configured secret string.
      *
-     * <p>This method creates a SecretKey instance using an HMAC-SHA algorithm
-     * suitable for JWT token signing. The key is generated from the configured
-     * secret string.</p>
-     *
-     * @return SecretKey instance for JWT signing operations
-     *
-     * <p><strong>Implementation Note:</strong> Uses JJWT's
-     * Keys.hmacShaKeyFor() for secure key generation.</p>
-     * <p><strong>Security:</strong> Key strength depends on the length and
-     * entropy of the secret string.</p>
+     * @return a SecretKey derived from the configured JWT secret suitable
+     *         for HMAC-SHA signing (HS512)
      */
     private SecretKey getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
 
-        // Ensure key is large enough for HS512 (>= 512 bits). If the provided
-        // secret is too short, derive a 512-bit key by hashing the secret
-        // with SHA-512.
+    // Ensure key is large enough for HS512 (>= 512 bits). If the
+    // provided secret is too short, derive a 512-bit key by hashing
+    // the secret with SHA-512.
         if (keyBytes.length * BITS_PER_BYTE < HMAC_MIN_BITS) {
             try {
-                final MessageDigest digest = MessageDigest.getInstance(HASH_ALGO);
+                final String algo = HASH_ALGO;
+                final MessageDigest digest = MessageDigest.getInstance(algo);
                 keyBytes = digest.digest(keyBytes);
             } catch (NoSuchAlgorithmException e) {
-                // SHA-512 must be available on the platform; rethrow as runtime if not
-                final String err = HASH_ALGO + " MessageDigest not available";
+                // SHA-512 must be available on the platform; rethrow as runtime
+                // if not
+                final String errSuffix = " MessageDigest not available";
+                final String err = HASH_ALGO + errSuffix;
                 throw new IllegalStateException(err, e);
             }
         }
-
         // Use JJWT helper to produce an HMAC-SHA key of the correct length.
         final SecretKey signingKey = Keys.hmacShaKeyFor(keyBytes);
+
         return signingKey;
     }
 
     /**
-     * Generates a JWT token from an authenticated user principal.
+     * Generates a signed JWT token for the authenticated principal.
      *
-     * <p>This method creates a signed JWT token containing the user's ID as the subject,
-     * issued at the current time, and with a configured expiration time. The token is
-     * signed using HMAC-SHA512 algorithm for maximum security.</p>
-     *
-     * @param authentication the Spring Security authentication object containing user details
-     * @return String the compact JWT token ready for use in Authorization headers
-     *
-     * @throws ClassCastException if the authentication principal is not a UserPrincipal
-     *
-     * <p><strong>API Note:</strong> The generated token should be prefixed with "Bearer " in Authorization headers</p>
-     * <p><strong>Implementation Note:</strong> Token subject contains the user ID for efficient user lookup</p>
-     * <p><strong>Security:</strong> Token is signed with HMAC-SHA512 and includes expiration time</p>
+    * @param authentication Spring Security authentication
+    *        containing user details
+     * @return compact JWT token (no "Bearer " prefix)
      */
     public String generateJwtToken(final Authentication authentication) {
-        // Use the AppUserPrincipal interface to avoid tight coupling to concrete implementation
-    final AppUserPrincipal userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
+    // Use the AppUserPrincipal interface to avoid tight coupling to
+    // a concrete implementation.
+    final AppUserPrincipal userPrincipal;
+    userPrincipal = (AppUserPrincipal) authentication.getPrincipal();
 
     final long now = System.currentTimeMillis();
     final Date issuedAt = new Date(now);
@@ -136,63 +110,44 @@ public class JwtUtils {
         .setSubject(userPrincipal.getId())
         .setIssuedAt(issuedAt)
         .setExpiration(expiryDate)
-        .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+        .signWith(
+            getSigningKey(),
+            SignatureAlgorithm.HS512
+        )
         .compact();
     }
 
     /**
-     * Extracts the user ID from a valid JWT token.
+     * Extract the user id (subject) from a JWT token.
      *
-     * <p>This method parses and validates the JWT token, then extracts the user ID
-     * from the token's subject claim. The token signature is verified during parsing.</p>
-     *
-     * @param token the JWT token to parse (without "Bearer " prefix)
-     * @return String the user ID extracted from the token subject
-     *
-     * @throws JwtException if the token is invalid, expired, or malformed
-     *
-     * <p><strong>API Note:</strong> Token must be valid and non-expired for successful extraction</p>
-     * <p><strong>Implementation Note:</strong> Performs full token validation including signature verification</p>
-     * <p><strong>Security:</strong> Only tokens with valid signatures can be successfully parsed</p>
+     * @param token compact JWT token (no "Bearer " prefix)
+     * @return user id from token subject
      */
     public String getUserIdFromJwtToken(final String token) {
-        final var builder = Jwts.parserBuilder();
-        builder.setSigningKey(getSigningKey());
+    final var parserBuilder = Jwts.parserBuilder();
+    parserBuilder.setSigningKey(getSigningKey());
 
-        final var parser = builder.build();
+    final var parser = parserBuilder.build();
 
-        return parser.parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    return parser
+        .parseClaimsJws(token)
+        .getBody()
+        .getSubject();
     }
 
     /**
-     * Validates a JWT token for authenticity, integrity, and expiration.
+     * Validate a JWT token string.
      *
-     * <p>This method performs comprehensive validation of JWT tokens including signature
-     * verification, expiration checking, and format validation. All validation errors
-     * are logged with appropriate detail levels for debugging and security monitoring.</p>
-     *
-     * @param authToken the JWT token to validate (without "Bearer " prefix)
-     * @return boolean true if the token is valid, false otherwise
-     *
-     * <p><strong>API Note:</strong> This method never throws exceptions - all errors result in false return value</p>
-     * <p><strong>Implementation Note:</strong> Comprehensive error logging helps with debugging authentication issues</p>
-     * <p><strong>Security:</strong> Failed validations are logged for security monitoring purposes</p>
-     *
-     * @see SecurityException for invalid JWT signatures
-     * @see MalformedJwtException for malformed JWT tokens
-     * @see ExpiredJwtException for expired JWT tokens
-     * @see UnsupportedJwtException for unsupported JWT features
-     * @see IllegalArgumentException for empty or null token claims
+     * @param authToken compact JWT token (no "Bearer " prefix)
+     * @return true when token is valid, false otherwise
      */
     public boolean validateJwtToken(final String authToken) {
         try {
-            final var parser = Jwts.parserBuilder()
-                    .setSigningKey(getSigningKey())
-                    .build();
+        final var builder = Jwts.parserBuilder();
+        builder.setSigningKey(getSigningKey());
+        final var parser = builder.build();
 
-            parser.parseClaimsJws(authToken);
+        parser.parseClaimsJws(authToken);
             return true;
         } catch (SecurityException e) {
             LOGGER.error("Invalid JWT signature: {}", e.getMessage());

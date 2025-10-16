@@ -11,12 +11,15 @@ import lombok.AllArgsConstructor;
 /**
  * DTO for creating a new user.
  *
- * <p>Contains only the fields required to create a user in the system. Validation
- * constraints are applied via Jakarta Bean Validation annotations. Passwords provided
- * here must meet the minimum security requirements and will be encoded before
- * persistence.</p>
+ * <p>Contains only the fields required to create a user in the system.
+ * Validation constraints are applied via Jakarta Bean Validation
+ * annotations. Passwords provided here must meet the minimum security
+ * requirements and will be encoded before persistence.</p>
  *
- * <p><strong>Note:</strong> The {@code role} field defaults to {@code "USER"} when omitted.</p>
+ * <p>
+ * <strong>Note:</strong> The {@code role} field defaults to {@code "USER"}
+ * when omitted.
+ * </p>
  *
  * @since 1.0
  */
@@ -26,8 +29,11 @@ import lombok.AllArgsConstructor;
 public class UserCreateRequest {
     /** User display name. */
     @NotBlank(message = "Name is required")
-    @Size(min = AppConstants.USER_NAME_MIN, max = AppConstants.USER_NAME_MAX,
-        message = "Name must be between 2 and 50 characters")
+    @Size(
+        min = AppConstants.USER_NAME_MIN,
+        max = AppConstants.USER_NAME_MAX,
+        message = "Name must be between 2 and 50 characters"
+    )
     private String name;
 
     /** User email address. */
@@ -37,7 +43,10 @@ public class UserCreateRequest {
 
     /** Plain-text password supplied at creation; encoded before persistence. */
     @NotBlank(message = "Password is required")
-    @Size(min = AppConstants.USER_PASSWORD_MIN, message = "Password must be at least 6 characters")
+    @Size(
+        min = AppConstants.USER_PASSWORD_MIN,
+        message = "Password must be at least 6 characters"
+    )
     private String password;
 
     /** Role assigned to the new user (defaults to USER). */

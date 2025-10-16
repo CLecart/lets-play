@@ -1,4 +1,4 @@
 /**
- * Repository interfaces for data access (Spring Data repositories).
+ * Spring Data repository interfaces for persistence operations.
  */
 package com.example.lets_play.repository;

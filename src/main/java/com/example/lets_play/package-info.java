@@ -1,8 +1,8 @@
 /**
- * Root package for the Lets Play application.
+ * Root package for the lets-play application.
  *
- * <p>Contains the Spring Boot application entry point and top-level
- * configuration. Sub-packages include controllers, services, models,
- * DTOs, security code, and application-specific utilities.</p>
+ * <p>Holds the Spring Boot entry point and top-level configuration.
+ * Sub-packages provide controllers, services, models, DTOs, security
+ * and utilities.</p>
  */
 package com.example.lets_play;

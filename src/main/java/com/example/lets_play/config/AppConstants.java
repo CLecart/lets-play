@@ -1,7 +1,10 @@
 package com.example.lets_play.config;
 
 /**
- * Centralized application constants to avoid magic numbers and strings.
+ * Centralized application constants to avoid magic numbers and
+ * strings.
+ *
+ * @since 1.0
  */
 public final class AppConstants {
     private AppConstants() {
@@ -16,6 +19,9 @@ public final class AppConstants {
 
     /** Minimum allowed length for user passwords. */
     public static final int USER_PASSWORD_MIN = 6;
+
+    /** Maximum allowed length for user passwords. */
+    public static final int USER_PASSWORD_MAX = 100;
 
     /** Maximum allowed length for email fields. */
     public static final int EMAIL_MAX = 100;

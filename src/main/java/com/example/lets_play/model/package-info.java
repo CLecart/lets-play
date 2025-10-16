@@ -1,6 +1,6 @@
 /**
  * Domain model classes representing persistent entities.
  *
- * <p>Includes data structures persisted to the database and their basic documentation.
+ * <p>Data structures persisted to the database.</p>
  */
 package com.example.lets_play.model;

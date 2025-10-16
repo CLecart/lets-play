@@ -7,16 +7,17 @@ import lombok.AllArgsConstructor;
 /**
  * DTO returned to clients representing a user without sensitive fields.
  *
- * <p>This class is used as the canonical representation of a user in API responses.
- * It intentionally omits sensitive data such as passwords and security details.
- * Use {@link com.example.lets_play.dto.UserCreateRequest} and {@link com.example.lets_play.dto.UserUpdateRequest}
- * for incoming requests when creating or updating users.</p>
+ * <p>This class is used as the canonical representation of a user in API
+ * responses. It intentionally omits sensitive data such as passwords and
+ * security details. Use {@link com.example.lets_play.dto.UserCreateRequest}
+ * and {@link com.example.lets_play.dto.UserUpdateRequest} for incoming
+ * requests when creating or updating users.</p>
  *
- * <p>Example usage:
+ * <p>Example usage:</p>
  * <pre>
- * UserResponse resp = new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole());
+ * UserResponse resp = new UserResponse(user.getId(), user.getName(),
+ *     user.getEmail(), user.getRole());
  * </pre>
- * </p>
  *
  * @since 1.0
  */

@@ -14,7 +14,8 @@ import lombok.Data;
  * and security compliance.</p>
  *
  * <p>The class uses Bean Validation (JSR-303) annotations to enforce
- * input validation rules and Lombok annotations to reduce boilerplate code.</p>
+ * input validation rules and Lombok annotations to reduce boilerplate
+ * code.</p>
  *
  * @author Let's Play Development Team
  * @version 1.0
@@ -46,18 +47,22 @@ public class LoginRequest {
     /**
      * User's password for authentication.
      *
-     * <p>Must meet minimum security requirements and cannot be blank.
-     * The password will be validated against the stored hashed password.</p>
-     *
-     * <p><strong>API Note:</strong> Password is transmitted in plain text but should be sent over HTTPS</p>
-     * <p><strong>Implementation Note:</strong> Password is never stored in plain text in the database</p>
-     * <p><strong>Security:</strong> Ensure this field is not logged or exposed in error messages</p>
+    * <p>Must meet minimum security requirements and cannot be blank.
+    * The password will be validated against the stored hashed
+    * password.</p>
+    *
+    * <p><strong>API Note:</strong> Password is transmitted in plain text
+    * but should always be sent over HTTPS.</p>
+    * <p><strong>Implementation Note:</strong> Password is never stored in
+    * plain text in the database.</p>
+    * <p><strong>Security:</strong> Ensure this field is not logged or
+    * exposed in error messages.</p>
      */
     @NotBlank(message = "Password is required and cannot be blank")
     @Size(
-            min = AppConstants.USER_PASSWORD_MIN,
-            max = 100,
-            message = "Password must be between 6 and 100 characters"
+        min = AppConstants.USER_PASSWORD_MIN,
+        max = AppConstants.USER_PASSWORD_MAX,
+        message = "Password must be between 6 and 100 characters"
     )
     private String password;
 }

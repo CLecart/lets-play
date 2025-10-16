@@ -1,6 +1,7 @@
 /**
- * Security-related classes: authentication, authorization, JWT utilities, and principals.
+ * Security classes: authentication, authorization and JWT utilities.
  *
- * <p>Includes filters, entry points, token utilities and user principal abstractions used by Spring Security.
+ * <p>Includes filters, entry points, token utilities and user principal
+ * abstractions for Spring Security.</p>
  */
 package com.example.lets_play.security;
