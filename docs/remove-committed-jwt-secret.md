@@ -1,162 +1,183 @@
 # Remove committed JWT secret from repository history
 
-This document provides a safe, repeatable plan to remove an accidentally committed JWT secret from Git history, rotate the secret in production, and update team/dev workflows.
+This document explains a safe, repeatable plan to remove an accidentally
+committed JWT secret from Git history, rotate the secret in your
+deployments/CI, and coordinate the forced-push with the team.
 
-High-level summary
+Summary
 
-- The working tree already contains a placeholder value in `src/main/resources/application.properties` (`app.jwt.secret=CHANGE_ME_DO_NOT_COMMIT`).
-- However, the secret exists in the Git history and must be removed using a history-rewrite tool (git-filter-repo or BFG).
-- Rewriting history is destructive: it changes commit SHAs. Coordinate with your team and follow the steps below.
+- The working tree already uses a placeholder in
+  `src/main/resources/application.properties`:
+  `app.jwt.secret=CHANGE_ME_DO_NOT_COMMIT`.
+- The actual secret still exists in Git history and must be removed with
+  a history-rewrite tool (`git-filter-repo` recommended, BFG as
+  alternative).
+- Rewriting history is destructive (it changes commit SHAs). Back up
+  first and coordinate a maintenance window.
 
-Prerequisites and important cautions
+Prerequisites and cautions
 
-- Back up the repository (a bare clone). Do not run any of the history-rewrite steps on the main/shared clone without a backup.
-- All collaborators must re-clone after a forced push, or follow the recovery steps below.
-- You need sufficient rights to force-push to the remote branch(es) you rewrite.
-- Prefer `git-filter-repo` (recommended) over BFG when available; `git-filter-repo` is faster and more flexible.
-- If your project is hosted on a platform (GitHub/GitLab/Bitbucket) with protected branches, create a temporary branch and coordinate unprotecting/pushing as appropriate.
+- Back up the repository (mirror clone). Do not run the rewrite on the
+  shared clone without a backup.
+- All collaborators must re-clone after a forced push or follow the
+  rescue steps below.
+- Ensure you have rights to force-push rewritten refs to the remote.
+- Prefer `git-filter-repo` (recommended): faster and more flexible than
+  BFG.
 
-Step 0 — Prepare and validate (non-destructive)
+Step 0 — prepare and validate (non-destructive)
 
-1. Identify all occurrences of likely secrets (quick scan):
+1. Quick scan for obvious occurrences (if you know the secret text):
 
 ```bash
-# from the repository root
-# show lines that contain the literal secret if you know it
+# from repository root
 git grep -n "YOUR_OLD_JWT_SECRET" || true
-
-# or scan for likely secret patterns (simple heuristics)
 git grep -n "app.jwt.secret" || true
 ```
 
-2. Create a backup bare clone (do this before any destructive operations):
+2. Create a mirror backup for safety:
 
 ```bash
-# adjust path as needed
-cd $(git rev-parse --show-toplevel)
+cd "$(git rev-parse --show-toplevel)"
 mkdir -p ../lets-play-backups
 git clone --mirror . ../lets-play-backups/lets-play-mirror.git
 ```
 
-3. Replace secrets in the working tree with placeholders and commit that change (this avoids reintroducing the secret after history rewrite):
+3. Replace the secret in the working tree with a placeholder and commit
+   so the secret isn't reintroduced after history rewrite. Use the
+   helper script `scripts/prepare_remove_jwt_secret.sh`:
 
 ```bash
-# run the helper script provided in scripts/prepare_remove_jwt_secret.sh
 bash scripts/prepare_remove_jwt_secret.sh
-# inspect changes and commit
-git status
-git add -A
-git commit -m "chore(secrets): replace committed JWT secret with placeholder in working tree"
+# inspect the diff, then commit
+git add src/main/resources/application.properties
+git commit -m "chore(secrets): replace committed JWT secret with placeholder"
 ```
 
-Step 1 — Choose a history-rewrite tool
-Option A (recommended): git-filter-repo (requires Python and installation)
+Step 1 — choose a history-rewrite tool
 
-- Install: `pip install git-filter-repo` or use your package manager if available.
-- The following command removes the secret string from all files in every commit and replaces it with the placeholder.
-
-Option B (alternative): BFG Repo-Cleaner (Java jar). BFG is simpler for removing whole files or replacing text but `git-filter-repo` is preferred.
-
-Step 2 — Use git-filter-repo to remove/replace the secret
-
-- Example: replace literal secret value with placeholder across history.
+- Recommended: `git-filter-repo` (Python). Install with:
 
 ```bash
-# from a fresh clone (not the working repo that others are using)
-# 1) Clone a fresh mirror
-git clone --mirror https://example.com/your/repo.git repo-mirror.git
+pip install --user git-filter-repo
+```
+
+- Alternative: BFG Repo-Cleaner (Java). BFG is useful for file
+  deletions and simple replacements but `git-filter-repo` is preferred.
+
+Step 2 — run `git-filter-repo` safely (manual push required)
+
+This script below (also provided at `scripts/rewrite_history_remove_jwt.sh`)
+performs the rewrite in a fresh mirror clone and does NOT push to origin.
+You must inspect the mirror and perform the final push manually when
+you are ready.
+
+High-level commands (safe flow):
+
+```bash
+# 1) Make a fresh mirror clone (do this on a machine that can push)
+git clone --mirror git@github.com:your-org/lets-play.git repo-mirror.git
 cd repo-mirror.git
 
-# 2) Run git-filter-repo replacement
-# Replace OLD_SECRET_TEXT (exact literal) with CHANGE_ME_DO_NOT_COMMIT
-# NOTE: This modifies all refs in the mirror
-git filter-repo --replace-text <(printf "OLD_SECRET_TEXT==>CHANGE_ME_DO_NOT_COMMIT\n")
+# 2) Prepare a replace-text file (do NOT echo the literal secret to
+#    public logs). The file contains lines like:
+#    OLD_SECRET_TEXT==>CHANGE_ME_DO_NOT_COMMIT
+printf '%s==>CHANGE_ME_DO_NOT_COMMIT
+' "<PASTE_OLD_SECRET_HERE>" > replace-jwt-secret.txt
+chmod 600 replace-jwt-secret.txt
 
-# 3) Inspect the rewritten history (use git log, git grep)
-git grep -n "OLD_SECRET_TEXT" || true
+# 3) Run git-filter-repo (rewrites all refs in this mirror)
+git filter-repo --replace-text replace-jwt-secret.txt
 
-# 4) Push the rewritten refs back to the origin (force)
-# Be sure you understand the control-plane implications before pushing
+# 4) Verify the old secret is gone
+git grep -nF "<PASTE_OLD_SECRET_HERE>" || true
+
+# 5) When satisfied, push rewritten refs to origin (manual, force)
+# WARNING: This is destructive. Ensure backups + team coordination.
 git push --force --mirror origin
 ```
 
-If the secret was stored in multiple forms (URL-encoded or PEM-wrapped), add each form as a replacement line.
+Step 2 (alternative) — using BFG
 
-Step 2 (alternate) — Use BFG to remove secrets
-
-- BFG can remove a file or replace strings. Example:
+If you prefer BFG, use it from a fresh mirror clone. Example:
 
 ```bash
-# Create a mirror
-git clone --mirror https://example.com/your/repo.git repo-mirror.git
+git clone --mirror git@github.com:your-org/lets-play.git repo-mirror.git
 cd repo-mirror.git
 
-# Remove any file named containing "secrets.properties" (example)
-java -jar /path/to/bfg.jar --delete-files secrets.properties
-
-# Or replace text across history using --replace-text file
-# Create replace.txt containing a line with the exact secret to replace:
-#  OLD_SECRET_TEXT==>CHANGE_ME_DO_NOT_COMMIT
+# Prepare replace.txt with a line like:
+# OLD_SECRET_TEXT==>CHANGE_ME_DO_NOT_COMMIT
 java -jar /path/to/bfg.jar --replace-text replace.txt
 
-# After BFG run, run the following to clean up:
+# Cleanup and prune
 git reflog expire --expire=now --all
 git gc --prune=now --aggressive
 
-# Push the rewritten refs
+# Inspect and then push if ready
 git push --force --mirror origin
 ```
 
-Step 3 — Post-rewrite cleanup and team coordination
+Step 3 — post-rewrite cleanup and rotation
 
-1. Notify team: every collaborator must re-clone the repository (or follow the rescue steps below).
-2. Rotate the secret used by all deployed environments (CI/CD, secret managers, keys):
-   - Create a new secret value in your secret manager (Vault, AWS Secrets Manager, GitHub/GitLab CI variable, etc.).
-   - Update production/staging deployments to use the new `APP_JWT_SECRET` value.
-3. Revoke any tokens that might have been signed with the old secret (if your system supports revocation) — otherwise, shorten token lifetime temporarily.
-4. Update the project README / SECURITY.md with the new secret handling guidance.
+1. Notify team to re-clone or follow recovery steps.
+2. Rotate secrets in all deployments / CI / secret stores:
+   - Generate a new secret value in your secrets manager.
+   - Update CI variables, platform secrets, and environments to the
+     new value (`APP_JWT_SECRET`).
+3. Revoke or reduce lifetime of JWTs signed with the old secret if
+   possible; otherwise shorten token lifetime temporarily until all
+   clients refresh.
+4. Update project documentation (`README.md`, `SECURITY.md`) with
+   guidance to keep secrets out of VCS.
 
-Step 4 — Verifications
+Step 4 — verification
 
-- Locally: after forced push, clone the repository again and run an all-tests build to confirm everything still passes.
+After forced push and rotation, clone fresh and run the full verify:
 
 ```bash
-# clone afresh
 git clone git@github.com:your-org/lets-play.git
 cd lets-play
 ./mvnw -U -DskipTests=false verify -DtrimStackTrace=false
 ```
 
-- Search for lingering secrets:
+Run secret scanning (optional):
 
 ```bash
 git grep -n "OLD_SECRET_TEXT" || true
-# optionally run truffleHog or other secret scanners
+# or run gitleaks/truffleHog for a thorough pass
 ```
 
-Rescue steps for contributors (if they have an old clone)
+Rescue steps for contributors
 
-- Easiest: reclone the repository fresh.
-- Advanced: rebase local work onto the new rewritten branch; see GitHub docs 'How to recover from a forced push'
+- Recommended: re-clone the repository fresh.
+- Advanced: stash/uncommitted work and rebase/migrate local changes
+  onto the rewritten history — see your Git host docs for recovery
+  instructions.
 
-Other notes and best practices
+Helpers included in this repo
 
-- Don't store secrets in VCS. Use environment variables, Vault, or your cloud provider's secrets manager.
-- Add local overrides to `.gitignore` if you keep local `application.properties` with secrets (but never commit them).
-- Consider adding pre-commit hooks (e.g., git-secrets) to prevent future mistakes.
-- Consider adding a CI secret-scanning step (truffleHog, gitleaks) to detect accidental check-ins.
+- `scripts/prepare_remove_jwt_secret.sh` — replaces the working-tree
+  secret with the placeholder and creates a backup at
+  `src/main/resources/application.properties.bak` (do **not** commit
+  the backup file). Use it before running the history rewrite.
+- `scripts/rewrite_history_remove_jwt.sh` — wraps `git-filter-repo` and
+  operates on a temporary mirror clone; the script does NOT push to
+  origin. Inspect the mirror and push manually when ready.
 
-Contact/Coordination checklist before forcing a push
+Checklist before forcing a push
 
 - [ ] Make a bare backup clone.
-- [ ] Inform all repo collaborators of the maintenance window.
-- [ ] Confirm you have required rights to force-push.
-- [ ] Prepare the rotated secret in the target secrets manager.
-
----
+- [ ] Inform all collaborators and schedule a maintenance window.
+- [ ] Verify you have rights to force-push.
+- [ ] Prepare the rotated secret in the target secret manager.
 
 If you want, I can:
 
-- Generate the helper script that replaces the secret in the working tree and commits the placeholder (I added `scripts/prepare_remove_jwt_secret.sh` as a helper below).
-- Show the exact `git-filter-repo` or BFG commands customized to the exact secret string (I can inject the concrete secret if you provide it). For safety I won't include any sensitive literal in the docs unless you confirm.
-- Walk you through performing the `git-filter-repo` operation interactively.
+- Produce a copy of `replace-jwt-secret.txt` for you to paste the old
+  secret into (I will not store or print the secret), or
+- Walk you step-by-step through running `scripts/rewrite_history_remove_jwt.sh`
+  on your machine when you are ready.
+
+Safety note: I will NOT run any destructive rewrite commands in this
+workspace without your explicit confirmation. Follow the mirror ->
+inspect -> push pattern above to avoid accidental data loss.
