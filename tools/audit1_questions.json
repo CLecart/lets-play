@@ -1,0 +1,212 @@
+[
+  {
+    "question": "Quel est l'objectif principal de l'application ?",
+    "answer": "Fournir une API REST pour gérer produits et utilisateurs, avec authentification et contrôle d'accès.\nArguments: Permet d'exposer des fonctionnalités via HTTP, facilite l'intégration avec des clients (web/mobile) et centralise la logique métier.",
+    "optional": false
+  },
+  {
+    "question": "Comment les utilisateurs s'authentifient-ils ?",
+    "answer": "Via un endpoint /api/auth/signin qui retourne un jeton JWT à inclure dans l'en-tête Authorization.\nArguments: Le JWT permet l'authentification sans garder d'état côté serveur, simplifie la scalabilité et est standard pour les APIs modernes.",
+    "optional": false
+  },
+  {
+    "question": "Les mots de passe sont-ils stockés et protégés ?",
+    "answer": "Ils doivent être hachés (ex. bcrypt) et non stockés en clair.\nArguments: Le hachage empêche la récupération du mot de passe si la base est compromise; bcrypt intègre un coût rendant les attaques par force brute plus difficiles.",
+    "optional": false
+  },
+  {
+    "question": "Quelles sont les méthodes de gestion des sessions et des jetons (JWT) ?",
+    "answer": "Utilisation de JWT signés, avec durée de vie limitée et mécanismes de révocation/rotation.\nArguments: Les durées limitées réduisent l'impact d'un vol de jeton; la rotation et les listes de révocation permettent d'invalider des sessions compromises.",
+    "optional": false
+  },
+  {
+    "question": "Existe-t-il une gestion des rôles et permissions ?",
+    "answer": "Oui — roles (ex. ROLE_USER, ROLE_ADMIN) contrôlant l'accès aux endpoints sensibles.\nArguments: Séparer rôles et permissions simplifie l'autorisation et permet de restreindre l'accès aux fonctions critiques.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il un mécanisme de limitation de débit (rate limiting) ?",
+    "answer": "Un filtre de rate limiting est en place pour protéger contre les abus et brute-force.\nArguments: Limiter le nombre de requêtes par IP/utilisateur prévient la surcharge et réduit le risque d'attaques par force brute sur l'authentification.",
+    "optional": false
+  },
+  {
+    "question": "Comment les entrées utilisateur sont-elles validées et nettoyées ?",
+    "answer": "Validation côté serveur des formats et valeurs, et sanitation des données envoyées.\nArguments: La validation empêche des données invalides d'entrer dans le système; la sanitation réduit le risque d'injection et XSS côté client.",
+    "optional": false
+  },
+  {
+    "question": "Quelles protections sont en place contre les injections (SQL/NoSQL) ?",
+    "answer": "Utilisation de requêtes paramétrées/ORM et validation des entrées pour éviter l'injection.\nArguments: Les requêtes préparées séparent code et données, empêchant l'exécution de payloads malveillants insérés dans les entrées utilisateur.",
+    "optional": false
+  },
+  {
+    "question": "Comment les dépendances sont-elles maintenues à jour ?",
+    "answer": "Processus régulier de mise à jour des dépendances et scans automatiques de vulnérabilités.\nArguments: Les dépendances peuvent contenir des failles; les mettre à jour réduit la surface d'attaque et corrige les vulnérabilités connues.",
+    "optional": false
+  },
+  {
+    "question": "Où sont stockés les secrets (clés, mots de passe, tokens) ?",
+    "answer": "Dans un gestionnaire de secrets (ex. Vault, AWS Secrets Manager) et jamais dans le code.\nArguments: Les gestionnaires centralisent l'accès, offrent audit et rotation, et évitent les fuites via le code source ou les commits accidentels.",
+    "optional": false
+  },
+  {
+    "question": "Quelle est la politique de sauvegarde et de restauration des données ?",
+    "answer": "Sauvegardes régulières (ex. quotidiennes), tests de restauration et copies hors site.\nArguments: Les sauvegardes permettent de récupérer après perte ou corruption; tester la restauration vérifie l'intégrité des backups.",
+    "optional": false
+  },
+  {
+    "question": "Comment gère-t-on les incidents de sécurité ?",
+    "answer": "Procédure d'incident documentée: détection, confinement, analyse, remédiation et communication.\nArguments: Un plan permet une réponse coordonnée rapide, réduit l'impact et respecte les obligations réglementaires de notification.",
+    "optional": false
+  },
+  {
+    "question": "Quelles métriques et logs sont collectés en production ?",
+    "answer": "Logs d'authentification, erreurs, actions sensibles, et métriques de performance (latence, erreurs).\nArguments: Ces données aident à détecter problèmes, enquêter sur incidents et mesurer la santé de l'application.",
+    "optional": false
+  },
+  {
+    "question": "Quels sont les SLA/SLO et comment sont-ils suivis ?",
+    "answer": "SLA/SLO définis selon criticité (ex. disponibilité 99.9%), suivis via métriques et alerting.\nArguments: Mesurer les SLOs permet d'aligner attentes, planifier capacity et répondre rapidement aux régressions.",
+    "optional": true
+  },
+  {
+    "question": "Quel est le processus de déploiement (CI/CD) ?",
+    "answer": "Pipelines automatisés: build, tests, staging, puis déploiement contrôlé en production.\nArguments: L'automatisation réduit les erreurs humaines, accélère les releases et garantit que les changements passent les mêmes contrôles.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il des tests automatisés (unitaires, intégration, E2E) ?",
+    "answer": "Oui: tests unitaires et d'intégration automatisés; E2E selon criticité des parcours.\nArguments: Les tests détectent les régressions tôt et augmentent la confiance lors des déploiements.",
+    "optional": false
+  },
+  {
+    "question": "Comment sont gérées les migrations de schéma et les changements de DB ?",
+    "answer": "Migration via outils versionnés (ex. Flyway/liquibase) avec étapes testées en staging.\nArguments: Les migrations versionnées assurent traçabilité et permettent rollback contrôlé en cas de problème.",
+    "optional": false
+  },
+  {
+    "question": "Quelles pratiques de revue de code sont en place ?",
+    "answer": "Revues systématiques via pull requests avec règles (au moins 1 relecteur) et checklists de sécurité.\nArguments: Les revues améliorent la qualité du code, partagent la connaissance et permettent d'attraper erreurs ou risques.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il des scans de vulnérabilités automatisés ?",
+    "answer": "Oui ou recommandé: scans réguliers des dépendances et analyses SAST/DAST.\nArguments: Les scans identifient vulnérabilités connues et potentiellement dangereuses avant mise en production.",
+    "optional": true
+  },
+  {
+    "question": "Existe-t-il un pare-feu applicatif (WAF) ou protection équivalente ?",
+    "answer": "Recommandé pour les services exposés: WAF ou règles en front (CDN/ALB).\nArguments: Un WAF bloque des patterns d'attaque courants et réduit le trafic malveillant ciblant l'application.",
+    "optional": true
+  },
+  {
+    "question": "La communication réseau utilise-t-elle TLS (HTTPS) partout ?",
+    "answer": "Oui: TLS obligatoire pour toutes les communications externes et internes quand possible.\nArguments: Le chiffrement protège les données en transit et empêche l'interception ou la falsification des requêtes.",
+    "optional": false
+  },
+  {
+    "question": "Comment sont gérés les accès administratifs (SSH, consoles, IAM) ?",
+    "answer": "Accès restreint via comptes individuels, MFA et gestion centralisée (IAM).\nArguments: Limiter et tracer les accès réduit le risque d'abus et facilite l'audit en cas d'incident.",
+    "optional": false
+  },
+  {
+    "question": "Les permissions respectent-elles le principe du moindre privilège ?",
+    "answer": "Oui: droits minimaux accordés en fonction du rôle et de la tâche.\nArguments: Moins de privilèges diminue l'impact en cas de compromission d'un compte ou d'une application.",
+    "optional": false
+  },
+  {
+    "question": "La rotation des clés et tokens est-elle planifiée ?",
+    "answer": "Rotation régulière des clés et plan de transition pour les JWT/clefs critiques.\nArguments: La rotation limite la durée d'exploitation d'une clé compromise et facilite la révocation ordonnée.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il une politique de conservation des logs et des données personnelles ?",
+    "answer": "Politique définie pour la durée de conservation et anonymisation des données sensibles selon réglementation.\nArguments: Respecter la vie privée et les obligations légales (ex. RGPD) tout en conservant les traces nécessaires pour l'analyse.",
+    "optional": false
+  },
+  {
+    "question": "L'application est-elle conforme aux obligations légales (ex. RGPD) ?",
+    "answer": "Les exigences légales sont prises en compte: traitements documentés, consentements et droits utilisateurs.\nArguments: La conformité réduit le risque juridique et protège la confidentialité des utilisateurs.",
+    "optional": false
+  },
+  {
+    "question": "Quel est le plan de reprise après sinistre (RTO/RPO) ?",
+    "answer": "Plan documenté définissant RTO/RPO et procédures de restauration des services.\nArguments: Avoir des objectifs clairs permet d'organiser les sauvegardes, la redondance et la reprise efficace après incident.",
+    "optional": true
+  },
+  {
+    "question": "Y a-t-il des tests de charge et de performance réguliers ?",
+    "answer": "Tests périodiques pour valider montée en charge et performances des endpoints critiques.\nArguments: Détecter les goulots d'étranglement avant la production évite les pannes en cas de montée de trafic.",
+    "optional": true
+  },
+  {
+    "question": "Est-ce que la gestion des erreurs protège les informations sensibles ?",
+    "answer": "Messages utilisateurs non techniques; détails techniques loggués côté serveur seulement.\nArguments: Empêche la fuite d'informations pouvant aider un attaquant tout en conservant les logs pour le diagnostic.",
+    "optional": false
+  },
+  {
+    "question": "Comment sont gérées les mises à jour et les patchs de sécurité ?",
+    "answer": "Processus régulier de patching, tests et déploiement automatisé via CI/CD.\nArguments: Appliquer rapidement les patchs réduit la fenêtre d'exposition aux vulnérabilités connues.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il un inventaire des composants et des versions (SBOM) ?",
+    "answer": "Inventaire recommandé (SBOM) listant composants et versions pour suivi des vulnérabilités.\nArguments: Connaître précisément les composants facilite l'identification et la correction rapide des failles.",
+    "optional": true
+  },
+  {
+    "question": "Comment sont gérés les accès aux environnements (dev/staging/prod) ?",
+    "answer": "Accès séparés, variables d'environnement distinctes et secrets différents pour chaque environnement.\nArguments: Évite les fuites croisées et limite l'impact d'erreurs sur l'environnement de production.",
+    "optional": false
+  },
+  {
+    "question": "Existe-t-il un programme de tests d'intrusion (pentest) périodiques ?",
+    "answer": "Recommandé: pentests réguliers surtout avant mise en production majeure.\nArguments: Les pentests détectent des scénarios d'attaque réels que les outils automatisés peuvent manquer.",
+    "optional": true
+  },
+  {
+    "question": "La surveillance centralisée (SIEM) est-elle en place ?",
+    "answer": "SIEM ou centralisation des logs recommandés pour corrélation et détection.\nArguments: Centraliser facilite la détection d'attaques réparties et l'investigation des incidents.",
+    "optional": true
+  },
+  {
+    "question": "Comment informer les utilisateurs et autorités en cas de violation de données ?",
+    "answer": "Procédure de notification conforme aux obligations légales: identifier impact, notifier parties concernées et autorités si requis.\nArguments: Respecter la loi et maintenir la confiance des utilisateurs.",
+    "optional": false
+  },
+  {
+    "question": "Quelles sont les responsabilités et rôles pour la sécurité au sein de l'équipe ?",
+    "answer": "Responsabilités claires (propriétaire sécurité, équipes devops, administrateurs) et procédures d'escalade.\nArguments: Clarifier les rôles accélère la réponse aux incidents et assure la maintenance des bonnes pratiques.",
+    "optional": false
+  },
+  {
+    "question": "Y a-t-il un plan de formation et de sensibilisation à la sécurité pour l'équipe ?",
+    "answer": "Programmes de sensibilisation réguliers recommandés pour développeurs et opérateurs.\nArguments: La plupart des incidents proviennent d'erreurs humaines; former l'équipe réduit ces risques.",
+    "optional": true
+  },
+  {
+    "question": "Des mécanismes de surveillance anti-abus (ex. détection de bots) sont-ils en place ?",
+    "answer": "Outils ou règles pour détecter comportements anormaux et bots (rate-limit, CAPTCHAs si nécessaire).\nArguments: Réduire les abus améliore la disponibilité et protège les ressources.",
+    "optional": true
+  },
+  {
+    "question": "Y a-t-il des procédures pour supprimer ou anonymiser les données d'un utilisateur (droit à l'oubli) ?",
+    "answer": "Procédure de suppression/anonymisation documentée et tests de conformité (ex. RGPD).\nArguments: Respecter les droits des utilisateurs et réduire les risques de conservation inutile de données sensibles.",
+    "optional": false
+  },
+  {
+    "question": "Des politiques de délivrance et révocation des accès API sont-elles définies ?",
+    "answer": "Politiques pour délivrer, surveiller et révoquer clés API (durée, scope, rotation).\nArguments: Contrôler l'accès API limite les abus et permet d'invalider rapidement des clés compromises.",
+    "optional": false
+  },
+  {
+    "question": "Quelle est la procédure pour la gestion des vulnérabilités découvertes ?",
+    "answer": "Processus de triage, priorisation et correction avec suivi (tracking) et communication aux parties prenantes.\nArguments: Gérer rapidement les vulnérabilités réduit la fenêtre d'exploitation et organise la réparation.",
+    "optional": false
+  },
+  {
+    "question": "Preuve que les tests s'exécutent (artefact) :",
+    "answer": "Voir tools/TESTS.md et tools/test_results.txt pour la sortie complète du build et des tests.\nArguments: Fournit un enregistrement reproduisible du résultat de la commande de vérification canonique (./mvnw -U -DskipTests=false verify -DtrimStackTrace=false).",
+    "optional": false
+  }
+]
