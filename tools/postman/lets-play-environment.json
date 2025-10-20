@@ -1,0 +1,18 @@
+{
+  "id": "lets-play-env",
+  "name": "lets-play (local)",
+  "values": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "enabled": true
+    },
+    {
+      "key": "token",
+      "value": "",
+      "enabled": true
+    }
+  ],
+  "timestamp": 0,
+  "synced": false
+}
