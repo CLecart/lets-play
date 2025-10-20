@@ -166,6 +166,26 @@ curl -H "Authorization: Bearer ADMIN_JWT_TOKEN" \
 3. Utilise Postman pour une interface graphique plus conviviale
 4. Regarde les logs de l'application pour déboguer : `tail -f logs/app.log`
 
+## 🛠️ Script d'audit automatique
+
+Pour faciliter les vérifications, un script automatise la séquence signup → signin → extraction du JWT → test produits (création/suppression).
+
+Usage :
+
+```bash
+# depuis la racine du projet
+bash tools/audit_manual.sh
+```
+
+Fichiers générés par le script :
+
+- `tools/audit_manual_output.txt` : sortie synthétique et résultats
+- `tools/audit_manual_run.log` : log brut de l'exécution
+
+Le script essaie d'extraire automatiquement le token (utilise `jq` si présent) et effectue un cleanup (suppression du produit créé).
+
+Si vous préférez lancer manuellement les étapes, suivez la section principale ci‑dessus.
+
 ## 🎯 RÉSULTAT ATTENDU
 
 Si tous les tests passent, ton API est complètement fonctionnelle avec :
