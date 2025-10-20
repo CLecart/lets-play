@@ -178,18 +178,17 @@
 				<executions>
 					<execution>
 						<id>generate-xref</id>
-						<phase>verify</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>jxr</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>generate-test-xref</id>
-						<phase>verify</phase>
+						<phase>generate-test-sources</phase>
 						<goals>
 							<goal>test-jxr</goal>
 						</goals>
-					
 					</execution>
 				</executions>
 			</plugin>
@@ -236,6 +235,39 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<!-- m2e lifecycle mapping: instruct Eclipse m2e to ignore jxr/test-jxr executions
+		     This prevents the IDE warning "Plugin execution not covered by lifecycle
+		     configuration" while keeping the plugin executions for CLI Maven unchanged. -->
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-jxr-plugin</artifactId>
+										<versionRange>[3.1.1,)</versionRange>
+										<goals>
+											<goal>jxr</goal>
+											<goal>test-jxr</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>
