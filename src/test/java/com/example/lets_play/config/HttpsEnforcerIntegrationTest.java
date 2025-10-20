@@ -20,8 +20,8 @@ public class HttpsEnforcerIntegrationTest {
     void httpRequestIsRedirectedToHttps() throws Exception {
         final String url = "http://localhost:" + port + "/api/auth/ping";
 
-        final URL u = new URL(url);
-        final HttpURLConnection conn = (HttpURLConnection) u.openConnection();
+    final URL u = java.net.URI.create(url).toURL();
+    final HttpURLConnection conn = (HttpURLConnection) u.openConnection();
         conn.setInstanceFollowRedirects(false);
         conn.setRequestMethod("GET");
         conn.connect();

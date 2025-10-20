@@ -1,0 +1,62 @@
+[
+  {
+    _id: ObjectId('68f615819eb9463d24c2e5dc'),
+    email: 'admin@example.com',
+    password: '$2a$10$d64tbLoBEARRKzoiVDuNHeqEkQWy93CD0oW9/9DckHBeakk5smU/W',
+    role: 'ADMIN'
+  },
+  {
+    _id: ObjectId('68f615819eb9463d24c2e5dd'),
+    email: 'user@example.com',
+    password: '$2a$10$UO8Cu/Nc5sLjgZIvJPUyv.USmkuhsb4h/XkNRM6iLpV4OrEzERkVS',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f617d79eb9463d24c2e5de'),
+    email: 'audit_user@example.com',
+    password: '$2a$10$nOauhhO4In/KrH92jxPpRuJzRDUgl3X6NBPLm1rv/aIxVw0j9/yla',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f617e1af463580be31bcc4'),
+    email: 'owner+1760958433277@example.com',
+    password: '$2a$10$gnDJuxyiSqvRbGYjadVdxe5vrKIqItMI0kE9GxR7OjB.cTTBEgOTW',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f617e2af463580be31bcc6'),
+    email: 'intruder+1760958433993@example.com',
+    password: '$2a$10$8P6Vh4psyoi8ejQLvC3rxeosPBDnNRDKEG1piRRTi0yqcIX3141wi',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f619d2ea73a8ea190e5ee0'),
+    email: 'owner+1760958929845@example.com',
+    password: '$2a$10$6ZN6F.jCLD6kEPnnQHgrse3htW3pbSeShD83AYE3zyqNbL1iryd2y',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f619d2ea73a8ea190e5ee2'),
+    email: 'intruder+1760958930917@example.com',
+    password: '$2a$10$v6PK2fawpYal8WINLCuhwOrYZm.sqlzU33uvPTToSaM9m1OdHxNmu',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f61a44f043c4b361709949'),
+    email: 'owner+1760959043581@example.com',
+    password: '$2a$10$a7XDufU1toZA9x8XgFuvJOgvPyB/gUXGJtnbtlU4iWrvc1vkYJeBq',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f61a44f043c4b36170994b'),
+    email: 'intruder+1760959044355@example.com',
+    password: '$2a$10$8xYiOhdBb18diy0Gg1TOyepLPzR.T2uWwF3C5oSrsP1DwKouanHe2',
+    role: 'USER'
+  },
+  {
+    _id: ObjectId('68f61c139eb9463d24c2e5e2'),
+    email: 'admin_created@example.com',
+    password: '$2a$10$bvB/RfyvYwGQ.A5XTwHmZefOXo8j2jy7JZflN2NeZGEw/ybc3l05K',
+    role: 'USER'
+  }
+]

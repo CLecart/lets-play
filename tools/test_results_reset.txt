@@ -1,0 +1,353 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -----------------------< com.example:lets-play >------------------------
+[INFO] Building lets-play 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (prepare-agent) @ lets-play ---
+[INFO] argLine set to -javaagent:/home/zone01student/.m2/repository/org/jacoco/org.jacoco.agent/0.8.10/org.jacoco.agent-0.8.10-runtime.jar=destfile=/home/zone01student/dev/Java/lets-play/target/jacoco.exec
+[INFO] 
+[INFO] >>> jxr:3.1.1:jxr (generate-xref) > generate-sources @ lets-play >>>
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (prepare-agent) @ lets-play ---
+[INFO] argLine set to -javaagent:/home/zone01student/.m2/repository/org/jacoco/org.jacoco.agent/0.8.10/org.jacoco.agent-0.8.10-runtime.jar=destfile=/home/zone01student/dev/Java/lets-play/target/jacoco.exec
+[INFO] 
+[INFO] <<< jxr:3.1.1:jxr (generate-xref) < generate-sources @ lets-play <<<
+[INFO] 
+[INFO] 
+[INFO] --- jxr:3.1.1:jxr (generate-xref) @ lets-play ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ lets-play ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ lets-play ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] >>> jxr:3.1.1:test-jxr (generate-test-xref) > generate-test-sources @ lets-play >>>
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (prepare-agent) @ lets-play ---
+[INFO] argLine set to -javaagent:/home/zone01student/.m2/repository/org/jacoco/org.jacoco.agent/0.8.10/org.jacoco.agent-0.8.10-runtime.jar=destfile=/home/zone01student/dev/Java/lets-play/target/jacoco.exec
+[INFO] 
+[INFO] >>> jxr:3.1.1:jxr (generate-xref) > generate-sources @ lets-play >>>
+[INFO] 
+[INFO] --- jacoco:0.8.10:prepare-agent (prepare-agent) @ lets-play ---
+[INFO] argLine set to -javaagent:/home/zone01student/.m2/repository/org/jacoco/org.jacoco.agent/0.8.10/org.jacoco.agent-0.8.10-runtime.jar=destfile=/home/zone01student/dev/Java/lets-play/target/jacoco.exec
+[INFO] 
+[INFO] <<< jxr:3.1.1:jxr (generate-xref) < generate-sources @ lets-play <<<
+[INFO] 
+[INFO] 
+[INFO] --- jxr:3.1.1:jxr (generate-xref) @ lets-play ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ lets-play ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ lets-play ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] <<< jxr:3.1.1:test-jxr (generate-test-xref) < generate-test-sources @ lets-play <<<
+[INFO] 
+[INFO] 
+[INFO] --- jxr:3.1.1:test-jxr (generate-test-xref) @ lets-play ---
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ lets-play ---
+[INFO] skip non existing resourceDirectory /home/zone01student/dev/Java/lets-play/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ lets-play ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ lets-play ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.example.lets_play.ForbiddenIntegrationTest
+13:47:09.942 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.lets_play.ForbiddenIntegrationTest]: ForbiddenIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:47:10.114 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.ForbiddenIntegrationTest
+13:47:10.692 [main] INFO org.springframework.boot.devtools.restart.RestartApplicationListener -- Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:11.030+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.ForbiddenIntegrationTest   : Starting ForbiddenIntegrationTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:11.031+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.ForbiddenIntegrationTest   : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:11.032+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.ForbiddenIntegrationTest   : The following 1 profile is active: "test"
+2025-10-20T13:47:11.986+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:12.056+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:12.581+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2025-10-20T13:47:12.602+02:00  INFO 145571 --- [lets-play] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T13:47:12.602+02:00  INFO 145571 --- [lets-play] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-20T13:47:12.638+02:00  INFO 145571 --- [lets-play] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T13:47:12.639+02:00  INFO 145571 --- [lets-play] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1581 ms
+2025-10-20T13:47:12.835+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:12.881+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=33615931, minRoundTripTimeNanos=0}
+2025-10-20T13:47:13.227+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.config.RateLimitingFilter  : Filter 'rateLimitingFilter' configured for use
+2025-10-20T13:47:13.228+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.AuthTokenFilter   : Filter 'authenticationJwtTokenFilter' configured for use
+2025-10-20T13:47:13.228+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilter         : Filter 'httpsEnforcerFilter' configured for use
+2025-10-20T13:47:13.281+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:13.814+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:14.257+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 43543 (http) with context path '/'
+2025-10-20T13:47:14.267+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.ForbiddenIntegrationTest   : Started ForbiddenIntegrationTest in 3.585 seconds (process running for 5.426)
+2025-10-20T13:47:15.184+02:00  INFO 145571 --- [lets-play] [o-auto-1-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T13:47:15.185+02:00  INFO 145571 --- [lets-play] [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-20T13:47:15.186+02:00  INFO 145571 --- [lets-play] [o-auto-1-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-10-20T13:47:15.211+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-1] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/signup
+2025-10-20T13:47:15.224+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:15.227+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-1] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/signup
+2025-10-20T13:47:15.511+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-2] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/signin
+2025-10-20T13:47:15.512+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:15.513+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-2] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/signin
+2025-10-20T13:47:15.666+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-2] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-10-20T13:47:15.705+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-3] o.s.security.web.FilterChainProxy        : Securing POST /api/products
+2025-10-20T13:47:15.722+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-3] o.s.security.web.FilterChainProxy        : Secured POST /api/products
+2025-10-20T13:47:15.750+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-4] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/signup
+2025-10-20T13:47:15.751+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:15.752+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-4] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/signup
+2025-10-20T13:47:15.824+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-5] o.s.security.web.FilterChainProxy        : Securing POST /api/auth/signin
+2025-10-20T13:47:15.824+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:15.824+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-5] o.s.security.web.FilterChainProxy        : Secured POST /api/auth/signin
+2025-10-20T13:47:15.908+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-5] o.s.s.a.dao.DaoAuthenticationProvider    : Authenticated user
+2025-10-20T13:47:15.914+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-6] o.s.security.web.FilterChainProxy        : Securing PUT /api/products/68f62143b8238afe50d961de
+2025-10-20T13:47:15.922+02:00 DEBUG 145571 --- [lets-play] [o-auto-1-exec-6] o.s.security.web.FilterChainProxy        : Secured PUT /api/products/68f62143b8238afe50d961de
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.320 s -- in com.example.lets_play.ForbiddenIntegrationTest
+[INFO] Running com.example.lets_play.config.CorsConfigurationTest
+2025-10-20T13:47:15.974+02:00  INFO 145571 --- [lets-play] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.lets_play.config.CorsConfigurationTest]: CorsConfigurationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-10-20T13:47:15.992+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.config.CorsConfigurationTest
+2025-10-20T13:47:16.005+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:16.036+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.CorsConfigurationTest       : Starting CorsConfigurationTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:16.037+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.CorsConfigurationTest       : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:16.037+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.CorsConfigurationTest       : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:16.238+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:16.244+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 5 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:16.296+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:16.298+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1853470, minRoundTripTimeNanos=0}
+2025-10-20T13:47:16.326+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:16.451+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:16.574+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.config.RateLimitingFilter  : Filter 'rateLimitingFilter' configured for use
+2025-10-20T13:47:16.574+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilter         : Filter 'httpsEnforcerFilter' configured for use
+2025-10-20T13:47:16.574+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.AuthTokenFilter   : Filter 'authenticationJwtTokenFilter' configured for use
+2025-10-20T13:47:16.575+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-10-20T13:47:16.575+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-10-20T13:47:16.576+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-10-20T13:47:16.596+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.CorsConfigurationTest       : Started CorsConfigurationTest in 0.591 seconds (process running for 7.755)
+2025-10-20T13:47:16.623+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Securing OPTIONS /api/products
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.745 s -- in com.example.lets_play.config.CorsConfigurationTest
+[INFO] Running com.example.lets_play.config.HttpsEnforcerIntegrationTest
+2025-10-20T13:47:16.712+02:00  INFO 145571 --- [lets-play] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.lets_play.config.HttpsEnforcerIntegrationTest]: HttpsEnforcerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-10-20T13:47:16.713+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.config.HttpsEnforcerIntegrationTest
+2025-10-20T13:47:16.716+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:16.727+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.c.HttpsEnforcerIntegrationTest     : Starting HttpsEnforcerIntegrationTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:16.727+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.c.HttpsEnforcerIntegrationTest     : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:16.727+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.c.HttpsEnforcerIntegrationTest     : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:16.870+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:16.884+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 12 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:16.962+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 0 (http)
+2025-10-20T13:47:16.963+02:00  INFO 145571 --- [lets-play] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T13:47:16.964+02:00  INFO 145571 --- [lets-play] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-10-20T13:47:16.972+02:00  INFO 145571 --- [lets-play] [           main] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring embedded WebApplicationContext
+2025-10-20T13:47:16.972+02:00  INFO 145571 --- [lets-play] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 244 ms
+2025-10-20T13:47:16.989+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:16.991+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1486182, minRoundTripTimeNanos=0}
+2025-10-20T13:47:17.014+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.config.RateLimitingFilter  : Filter 'rateLimitingFilter' configured for use
+2025-10-20T13:47:17.015+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.AuthTokenFilter   : Filter 'authenticationJwtTokenFilter' configured for use
+2025-10-20T13:47:17.015+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilter         : Filter 'httpsEnforcerFilter' configured for use
+2025-10-20T13:47:17.026+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:17.114+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:17.169+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 42207 (http) with context path '/'
+2025-10-20T13:47:17.174+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.c.HttpsEnforcerIntegrationTest     : Started HttpsEnforcerIntegrationTest in 0.458 seconds (process running for 8.334)
+2025-10-20T13:47:17.197+02:00  INFO 145571 --- [lets-play] [o-auto-2-exec-1] o.a.c.c.C.[Tomcat-1].[localhost].[/]     : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T13:47:17.197+02:00  INFO 145571 --- [lets-play] [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-10-20T13:47:17.198+02:00  INFO 145571 --- [lets-play] [o-auto-2-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2025-10-20T13:47:17.201+02:00 DEBUG 145571 --- [lets-play] [o-auto-2-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/auth/ping
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.495 s -- in com.example.lets_play.config.HttpsEnforcerIntegrationTest
+[INFO] Running com.example.lets_play.config.RateLimitingFilterTest
+2025-10-20T13:47:17.211+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.config.RateLimitingFilterTest
+2025-10-20T13:47:17.215+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:17.232+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.RateLimitingFilterTest      : Starting RateLimitingFilterTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:17.232+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.RateLimitingFilterTest      : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:17.232+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.RateLimitingFilterTest      : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:17.334+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:17.339+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:17.392+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:17.394+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1178464, minRoundTripTimeNanos=0}
+2025-10-20T13:47:17.418+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:17.494+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:17.606+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.config.RateLimitingFilter  : Filter 'rateLimitingFilter' configured for use
+2025-10-20T13:47:17.606+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilter         : Filter 'httpsEnforcerFilter' configured for use
+2025-10-20T13:47:17.606+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.AuthTokenFilter   : Filter 'authenticationJwtTokenFilter' configured for use
+2025-10-20T13:47:17.606+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-10-20T13:47:17.606+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-10-20T13:47:17.606+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-10-20T13:47:17.614+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.RateLimitingFilterTest      : Started RateLimitingFilterTest in 0.4 seconds (process running for 8.773)
+2025-10-20T13:47:17.628+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Securing GET /api/auth/test-ping
+2025-10-20T13:47:17.629+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:17.631+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Secured GET /api/auth/test-ping
+2025-10-20T13:47:17.640+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Securing GET /api/auth/test-ping
+2025-10-20T13:47:17.641+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2025-10-20T13:47:17.641+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Secured GET /api/auth/test-ping
+2025-10-20T13:47:17.644+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Securing GET /api/auth/test-ping
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.451 s -- in com.example.lets_play.config.RateLimitingFilterTest
+[INFO] Running com.example.lets_play.config.HttpsEnforcerFilterTest
+2025-10-20T13:47:17.661+02:00  INFO 145571 --- [lets-play] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.lets_play.config.HttpsEnforcerFilterTest]: HttpsEnforcerFilterTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-10-20T13:47:17.665+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.config.HttpsEnforcerFilterTest
+2025-10-20T13:47:17.669+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:17.685+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilterTest     : Starting HttpsEnforcerFilterTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:17.685+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilterTest     : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:17.685+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilterTest     : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:17.810+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:17.815+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:17.869+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:17.870+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=1001620, minRoundTripTimeNanos=0}
+2025-10-20T13:47:17.918+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:18.048+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:18.096+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.config.RateLimitingFilter  : Filter 'rateLimitingFilter' configured for use
+2025-10-20T13:47:18.097+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilter         : Filter 'httpsEnforcerFilter' configured for use
+2025-10-20T13:47:18.097+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.AuthTokenFilter   : Filter 'authenticationJwtTokenFilter' configured for use
+2025-10-20T13:47:18.097+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-10-20T13:47:18.097+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-10-20T13:47:18.097+02:00  INFO 145571 --- [lets-play] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
+2025-10-20T13:47:18.102+02:00  INFO 145571 --- [lets-play] [           main] c.e.l.config.HttpsEnforcerFilterTest     : Started HttpsEnforcerFilterTest in 0.433 seconds (process running for 9.261)
+2025-10-20T13:47:18.116+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.security.web.FilterChainProxy        : Securing GET /api/auth/ping
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.461 s -- in com.example.lets_play.config.HttpsEnforcerFilterTest
+[INFO] Running com.example.lets_play.controller.AuthControllerTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.587 s -- in com.example.lets_play.controller.AuthControllerTest
+[INFO] Running com.example.lets_play.security.JwtUtilsEnvTest
+2025-10-20T13:47:18.725+02:00  INFO 145571 --- [lets-play] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.lets_play.security.JwtUtilsEnvTest]: JwtUtilsEnvTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-10-20T13:47:18.757+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.security.JwtUtilsEnvTest
+2025-10-20T13:47:18.765+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:18.836+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.security.JwtUtilsEnvTest   : Starting JwtUtilsEnvTest using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:18.837+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.security.JwtUtilsEnvTest   : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:18.837+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.security.JwtUtilsEnvTest   : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:19.049+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:19.059+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 8 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:19.155+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:19.157+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2698790, minRoundTripTimeNanos=0}
+2025-10-20T13:47:19.224+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:19.461+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:19.710+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.security.JwtUtilsEnvTest   : Started JwtUtilsEnvTest in 0.944 seconds (process running for 10.869)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.016 s -- in com.example.lets_play.security.JwtUtilsEnvTest
+[INFO] Running com.example.lets_play.LetsPlayApplicationTests
+2025-10-20T13:47:19.738+02:00  INFO 145571 --- [lets-play] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.lets_play.LetsPlayApplicationTests]: LetsPlayApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2025-10-20T13:47:19.739+02:00  INFO 145571 --- [lets-play] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.lets_play.LetsPlayApplication for test class com.example.lets_play.LetsPlayApplicationTests
+2025-10-20T13:47:19.744+02:00  INFO 145571 --- [lets-play] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-10-20T13:47:19.779+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.LetsPlayApplicationTests   : Starting LetsPlayApplicationTests using Java 21.0.8 with PID 145571 (started by zone01student in /home/zone01student/dev/Java/lets-play)
+2025-10-20T13:47:19.779+02:00 DEBUG 145571 --- [lets-play] [           main] c.e.lets_play.LetsPlayApplicationTests   : Running with Spring Boot v3.5.6, Spring v6.2.11
+2025-10-20T13:47:19.779+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.LetsPlayApplicationTests   : No active profile set, falling back to 1 default profile: "default"
+2025-10-20T13:47:19.943+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-10-20T13:47:19.958+02:00  INFO 145571 --- [lets-play] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 13 ms. Found 2 MongoDB repository interfaces.
+2025-10-20T13:47:20.048+02:00  INFO 145571 --- [lets-play] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.5.1"}, "os": {"type": "Linux", "name": "Linux", "architecture": "amd64", "version": "6.14.0-33-generic"}, "platform": "Java/Ubuntu/21.0.8+9-Ubuntu-0ubuntu124.04.1"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2cda8be9, com.mongodb.Jep395RecordCodecProvider@698cc99d, com.mongodb.KotlinCodecProvider@4d34baec]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-10-20T13:47:20.049+02:00  INFO 145571 --- [lets-play] [localhost:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=21, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=2292498, minRoundTripTimeNanos=0}
+2025-10-20T13:47:20.154+02:00  INFO 145571 --- [lets-play] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userDetailsServiceImpl
+2025-10-20T13:47:20.344+02:00 DEBUG 145571 --- [lets-play] [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, RateLimitingFilter, HttpsEnforcerFilter, AuthTokenFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2025-10-20T13:47:20.486+02:00  INFO 145571 --- [lets-play] [           main] c.e.lets_play.LetsPlayApplicationTests   : Started LetsPlayApplicationTests in 0.741 seconds (process running for 11.645)
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.771 s -- in com.example.lets_play.LetsPlayApplicationTests
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ lets-play ---
+[INFO] 
+[INFO] --- spring-boot:3.5.6:repackage (repackage) @ lets-play ---
+[INFO] Replacing main artifact /home/zone01student/dev/Java/lets-play/target/lets-play-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to /home/zone01student/dev/Java/lets-play/target/lets-play-0.0.1-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- jacoco:0.8.10:report (report) @ lets-play ---
+[INFO] Loading execution data file /home/zone01student/dev/Java/lets-play/target/jacoco.exec
+[INFO] Analyzed bundle 'lets-play' with 25 classes
+[INFO] 
+[INFO] >>> pmd:3.20.0:check (default) > :pmd @ lets-play >>>
+[INFO] 
+[INFO] --- pmd:3.20.0:pmd (pmd) @ lets-play ---
+[INFO] Skipping PMD execution
+[INFO] 
+[INFO] <<< pmd:3.20.0:check (default) < :pmd @ lets-play <<<
+[INFO] 
+[INFO] 
+[INFO] --- pmd:3.20.0:check (default) @ lets-play ---
+[INFO] Skipping PMD execution
+[INFO] 
+[INFO] --- pmd:3.20.0:pmd (default) @ lets-play ---
+[INFO] Skipping PMD execution
+[INFO] 
+[INFO] --- checkstyle:3.2.2:check (default) @ lets-play ---
+[INFO] You have 0 Checkstyle violations.
+[INFO] 
+[INFO] --- checkstyle:3.2.2:checkstyle (default) @ lets-play ---
+[INFO] Rendering content with org.apache.maven.skins:maven-default-skin:jar:1.3 skin.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.528 s
+[INFO] Finished at: 2025-10-20T13:47:23+02:00
+[INFO] ------------------------------------------------------------------------

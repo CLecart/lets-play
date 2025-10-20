@@ -1,0 +1,15 @@
+HTTP/1.1 200 
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 20 Oct 2025 11:23:05 GMT
+
+{"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OGY2MWI3NzllYjk0NjNkMjRjMmU1ZTEiLCJpYXQiOjE3NjA5NTkzODUsImV4cCI6MTc2MTA0NTc4NX0.M1uIjX6g7oBTmemreV7MkfLsXvBUafBRpDtQUW-oTX0-Yk2IUUzcy8xLnF3bFYclqFMqmr2UCMpE1y3q3jNeoQ","type":"Bearer","id":"68f61b779eb9463d24c2e5e1","name":"UT","email":"ut_user@example.com","role":"ROLE_USER"}
