@@ -22,6 +22,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security configuration for JWT authentication and
@@ -144,9 +146,18 @@ public class WebSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Use local variables to keep lines short for checkstyle
-        final var originList = allowedOrigins.split(",");
-        final var originPatterns = Arrays.asList(originList);
+        // Allow a special value '*' or 'all' to permit any origin. Otherwise
+        // split and trim the comma-separated list from properties.
+        final var trimmed = allowedOrigins == null ? "" : allowedOrigins.trim();
+        final List<String> originPatterns;
+        if ("*".equals(trimmed) || "all".equalsIgnoreCase(trimmed)) {
+            originPatterns = List.of("*");
+        } else {
+            originPatterns = Arrays.stream(trimmed.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+        }
         configuration.setAllowedOriginPatterns(originPatterns);
 
         final var methods = Arrays.asList(

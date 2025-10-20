@@ -47,3 +47,9 @@ build/
 
 # Local env file (do not commit)
 .env
+
+# Local keystore and config directory
+config/
+
+# Tools outputs (audit artifacts)
+tools/
