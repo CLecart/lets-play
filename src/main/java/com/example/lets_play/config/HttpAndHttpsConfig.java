@@ -7,7 +7,9 @@ import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class HttpAndHttpsConfig implements WebServerFactoryCustomizer<TomcatServletWebServerFactory> {
+public class HttpAndHttpsConfig
+    implements WebServerFactoryCustomizer<
+        TomcatServletWebServerFactory> {
 
     @Value("${server.port:8443}")
     private int httpsPort;
