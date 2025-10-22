@@ -47,3 +47,6 @@ build/
 
 # Local env file (do not commit)
 .env
+
+# Keystore files
+config/*.p12
