@@ -1,76 +1,0 @@
-Audit manual run at: 2025-10-20T13:46:49+02:00
-\nSIGNUP
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   204    0   100  100   104    563    586 --:--:-- --:--:-- --:--:--  1146100   204    0   100  100   104    562    584 --:--:-- --:--:-- --:--:--  1146
-HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Mon, 20 Oct 2025 11:46:49 GMT
-
-{"id":"68f62129cecf5e9e56e32e07","name":"Audit User","email":"audit_user@example.com","role":"USER"}\nSIGNIN
-{"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OGY2MjEyOWNlY2Y1ZTllNTZlMzJlMDciLCJpYXQiOjE3NjA5NjA4MDksImV4cCI6MTc2MTA0NzIwOX0.bHUsGu6saAwClxngsqHb7_NvOTZc7vwzlDjQiVZKTZLNPrP0d-ZCNQlCcOdo0SgQV-1wZEK8bmJpIuynvlNy8w","type":"Bearer","id":"68f62129cecf5e9e56e32e07","name":"Audit User","email":"audit_user@example.com","role":"ROLE_USER"}
-\nTOKEN=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI2OGY2MjEyOWNlY2Y1ZTllNTZlMzJlMDciLCJpYXQiOjE3NjA5NjA4MDksImV4cCI6MTc2MTA0NzIwOX0.bHUsGu6saAwClxngsqHb7_NvOTZc7vwzlDjQiVZKTZLNPrP0d-ZCNQlCcOdo0SgQV-1wZEK8bmJpIuynvlNy8w
-\nLIST PRODUCTS
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100     2    0     2    0     0     42      0 --:--:-- --:--:-- --:--:--    43
-HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Mon, 20 Oct 2025 11:46:49 GMT
-
-[]\nCREATE PRODUCT
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   222    0   145  100    77   2933   1557 --:--:-- --:--:-- --:--:--  4530
-HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
-Content-Type: application/json
-Transfer-Encoding: chunked
-Date: Mon, 20 Oct 2025 11:46:49 GMT
-
-{"id":"68f62129cecf5e9e56e32e08","name":"Audit Product","description":"Created by audit script","price":9.99,"userId":"68f62129cecf5e9e56e32e07"}\nDELETE PRODUCT 68f62129cecf5e9e56e32e08
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
-HTTP/1.1 200 
-Vary: Origin
-Vary: Access-Control-Request-Method
-Vary: Access-Control-Request-Headers
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 0
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Pragma: no-cache
-Expires: 0
-X-Frame-Options: DENY
-Content-Length: 0
-Date: Mon, 20 Oct 2025 11:46:49 GMT
-
-\nAudit manual complete, output saved to tools/audit_manual_output_reset.txt
