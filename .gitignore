@@ -51,5 +51,8 @@ build/
 # Local keystore and config directory
 config/
 
+# Keystore files (explicit)
+config/*.p12
+
 # Tools outputs (audit artifacts)
 tools/
